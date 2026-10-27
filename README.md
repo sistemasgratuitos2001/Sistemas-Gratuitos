@@ -1,30 +1,36 @@
 # Biblioteca Pessoal
 
-Sistema gratuito para catálogos pessoais e pequenas bibliotecas: acervo, leitores, empréstimos e reservas. O projeto mantém duas formas de uso: a aplicação local já existente e uma nova aplicação web multi-biblioteca.
+Aplicação para gerir o acervo de uma casa, escritório ou pequena biblioteca. O produto pretendido é **instalado e usado localmente**: cada instalação mantém a sua própria base de dados, leitores, empréstimos e capas.
 
-## Aplicação local (Windows)
+## Estado atual
 
-Execute `Iniciar Biblioteca.bat`. Escolha **L** para abrir somente neste computador (padrão) ou **R** para permitir acesso a outros computadores da mesma rede local. O modo R não publica o servidor na Internet. Os dados locais ficam em `%LOCALAPPDATA%\BibliotecaPessoal-<id>` e permanecem independentes da nuvem.
+A versão funcional desta fase usa Python, Flask e SQLite. Está em testes; ainda não há instalador oficial nem atualização automática. O código também contém um protótipo web antigo em `web/`, mantido apenas como referência técnica. Ele não é a forma de utilização nem de distribuição da biblioteca.
 
-A cópia local usa Flask e SQLite, permite importar CSV e Excel, guarda capas no computador e exige que contas antigas com `1234` definam uma senha própria. As 262 thumbs temáticas ficam em `cdd_thumbs_assets.zip` e são instaladas localmente sem substituir personalizações existentes. Consulte este README e as mensagens do iniciador antes de alterar os dados.
+## Executar no Windows
 
-## Aplicação web
+1. Instale Python 3, se ainda não estiver instalado.
+2. Execute `Iniciar Biblioteca.bat`.
+3. Escolha **L** para usar somente neste computador ou **R** para testes na rede local.
 
-A aplicação web fica em [`web/`](web/README.md), usa React/Vite, Cloudflare Pages e Supabase. A base online começa vazia para que dados de leitores e itens da instalação local não sejam enviados sem uma escolha explícita.
+No modo de rede, o computador que iniciou a biblioteca precisa permanecer ligado. A base fica nele; os outros computadores acedem pela rede local. Este modo é experimental e não deve ser publicado na Internet nem encaminhado pelo router.
 
-- Repositório do código: https://github.com/sistemasgratuitos2001/Sistemas-Gratuitos
-- Aplicação web: será publicada no endereço Pages associado ao repositório após a autorização da integração GitHub↔Cloudflare.
-- Configuração, autenticação, variáveis públicas e limites: [`web/README.md`](web/README.md).
+A primeira execução cria o administrador e apresenta uma senha temporária única na janela de arranque. Guarde-a para entrar e altere-a quando o sistema pedir. As contas e palavras-passe ficam na base local.
 
-Na aplicação web, **Criar nova biblioteca** no início de sessão cria uma biblioteca privada e a primeira conta torna-se proprietária. A equipa cria colaboradores e leitores na área **Equipa > Convidar pessoa**; os links são de uso único e expiram em sete dias. Isso permite cadastro no próprio ecrã inicial sem dar a qualquer novo utilizador acesso a bibliotecas de terceiros.
+## Dados locais e atualizações
 
-## Dados e segurança
+A base SQLite e as capas ficam em `%LOCALAPPDATA%\BibliotecaPessoal-<id>`, separadas da pasta do programa para preservar os dados quando o código for atualizado. Faça cópias de segurança regulares dessa pasta.
 
-O código não deve conter banco SQLite, cópias de capas particulares, configuração de e-mail, senhas ou chaves administrativas. O `.gitignore` protege esses ficheiros. O navegador recebe somente a chave publicável do Supabase; a chave `service_role` nunca é usada no frontend.
+As versões do programa serão publicadas em **GitHub Releases** depois de existir um pacote de instalação adequado. Por enquanto, este repositório é código-fonte para desenvolvimento; descarregar o ZIP do GitHub não equivale a instalar o programa.
 
-A área online aplica RLS (Row Level Security) por biblioteca. Empréstimo, renovação, devolução e reserva passam por operações no banco com verificação do utilizador e bloqueio do exemplar, para evitar dois empréstimos simultâneos do último exemplar.
+O projeto está a ser preparado para Windows, macOS e Linux, mas o iniciador atual é específico do Windows. A distribuição multiplataforma será definida numa etapa posterior.
 
-## Licença e contribuições
+## Privacidade
 
-O código está público para consulta e colaboração. Ainda não foi atribuída uma licença formal; confirme as condições antes de reutilizar o projeto fora deste repositório.
+O repositório não deve conter bases SQLite de utilizadores, capas privadas, ficheiros de e-mail ou segredos. Esses ficheiros são excluídos pelo `.gitignore`. A aplicação não envia automaticamente os dados locais para a nuvem.
 
+## Código e colaboração
+
+- Código-fonte: https://github.com/sistemasgratuitos2001/Sistemas-Gratuitos
+- Página informativa: https://biblioteca-pessoal-5tk.pages.dev
+
+Consulte também [o protótipo web arquivado](web/README.md).
