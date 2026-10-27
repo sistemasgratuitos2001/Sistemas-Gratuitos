@@ -782,37 +782,40 @@ input::placeholder{color:#58666b;opacity:1}\ninput[list]::-webkit-calendar-picke
 @media(max-width:600px){#capa-preview,#capa-padrao-preview{height:300px !important;max-width:100%}}
 @media print{header,nav,.naoimprime,.btn,input,select{display:none !important}main{padding:0}}
 
-/* Entrada responsiva: computador, tablet e telemóvel */
+/* Login responsivo: rem para tipografia e espaçamentos; viewport para a composição. */
+html.login-page{font-size:clamp(16px,1.3vw,36px)}
 body.login-page{background:#f7f1df;color:#173b37;min-height:100vh}
 .login-page header,.login-page nav{display:none}
-.login-page main{max-width:none;min-height:100vh;padding:36px;display:grid;place-items:center}
-.login-page .aviso{width:min(100%,1080px);box-sizing:border-box;margin:0 auto 12px}
-.login-shell{width:min(1080px,100%);min-height:620px;display:grid;grid-template-columns:1.04fr .96fr;background:#fffefa;border-radius:22px;overflow:hidden;box-shadow:0 24px 70px #173b3722;border:1px solid #e9e2d1}
-.login-visual{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;padding:54px;color:#fff;background:linear-gradient(180deg,#132e2dcc 0%,#163b36aa 50%,#143b34ee 100%),url('/static/login-estantes.svg') center/cover no-repeat}
-.login-mark{width:58px;height:58px;border-radius:18px;background:#218b73;color:white;display:grid;place-items:center;font-size:32px;font-weight:800;box-shadow:0 9px 24px #052a2833}
-.login-visual>.login-mark{position:absolute;top:38px;left:42px}
-.login-kicker{font-size:13px;letter-spacing:.18em;font-weight:750;margin:0 0 12px;color:#d3ede2}
-.login-visual h1{font-size:clamp(34px,4vw,52px);line-height:1.08;max-width:430px;margin:0 0 14px;letter-spacing:-.035em}
-.login-visual>p:not(.login-kicker){font-size:18px;line-height:1.55;max-width:390px;color:#ecf4ef;margin:0}
-.login-shelf-note{font-size:13px;color:#d8e8df;margin-top:34px}
-.login-panel{padding:64px clamp(36px,6vw,76px);display:flex;flex-direction:column;justify-content:center}
-.login-panel-brand{display:flex;align-items:center;gap:12px;text-transform:uppercase;letter-spacing:.12em;font-size:13px;font-weight:750;color:#275f53}
-.login-mark.small{width:42px;height:42px;border-radius:13px;font-size:24px}
-.login-panel h2{font-size:34px;line-height:1.2;margin:34px 0 6px;letter-spacing:-.025em;color:#173b37}
-.login-intro{color:#64766f;margin:0 0 28px;font-size:16px}
-.login-form{display:flex;flex-direction:column;gap:9px}
-.login-form label{font-size:14px;font-weight:650;margin-top:7px}
-.login-form input{width:100%;box-sizing:border-box;padding:14px 15px;margin:0;border:1px solid #d8dfd7;border-radius:10px;background:#fff;color:#173b37;font-size:16px;min-height:52px}
+.login-page main{max-width:none;min-height:100svh;box-sizing:border-box;padding:2rem 0;display:grid;place-items:center}
+.login-page .aviso{width:min(86vw,100%);box-sizing:border-box;margin:0 auto 1rem}
+.login-shell{width:86vw;min-height:84svh;box-sizing:border-box;display:grid;grid-template-columns:1.04fr .96fr;background:#fffefa;border-radius:1.25rem;overflow:hidden;box-shadow:0 1.5rem 4rem #173b3722;border:1px solid #e9e2d1}
+.login-visual{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(2rem,3vw,4rem);color:#fff;background:linear-gradient(180deg,#132e2dcc 0%,#163b36aa 50%,#143b34ee 100%),url('/static/login-estantes.svg') center/cover no-repeat}
+.login-mark{width:3.6rem;height:3.6rem;border-radius:1.1rem;background:#218b73;color:white;display:grid;place-items:center;font-size:2rem;font-weight:800;box-shadow:0 .55rem 1.5rem #052a2833}
+.login-visual>.login-mark{position:absolute;top:2.4rem;left:2.6rem}
+.login-kicker{font-size:clamp(.75rem,.85rem,1.2rem);letter-spacing:.18em;font-weight:750;margin:0 0 .75rem;color:#d3ede2}
+.login-visual h1{font-size:clamp(2rem,2.8vw,4rem);line-height:1.08;max-width:26rem;margin:0 0 .9rem;letter-spacing:-.035em}
+.login-visual>p:not(.login-kicker){font-size:clamp(1rem,1.1vw,1.5rem);line-height:1.55;max-width:27rem;color:#ecf4ef;margin:0}
+.login-shelf-note{font-size:.85rem;color:#d8e8df;margin-top:2rem}
+.login-panel{padding:clamp(2rem,4.5vw,5rem);display:flex;flex-direction:column;justify-content:center}
+.login-panel-brand{display:flex;align-items:center;gap:.75rem;text-transform:uppercase;letter-spacing:.12em;font-size:.85rem;font-weight:750;color:#275f53}
+.login-mark.small{width:2.65rem;height:2.65rem;border-radius:.8rem;font-size:1.5rem}
+.login-panel h2{font-size:clamp(2rem,2.2vw,3rem);line-height:1.2;margin:2.2rem 0 .4rem;letter-spacing:-.025em;color:#173b37}
+.login-intro{color:#64766f;margin:0 0 1.8rem;font-size:1rem}
+.login-form{display:flex;flex-direction:column;gap:.6rem}
+.login-form label{font-size:.9rem;font-weight:650;margin-top:.55rem}
+.login-form input{width:100%;box-sizing:border-box;padding:.85rem 1rem;margin:0;border:1px solid #d8dfd7;border-radius:.65rem;background:#fff;color:#173b37;font-size:1rem;min-height:3.2rem}
 .login-form input:focus{outline:3px solid #218b7330;border-color:#218b73}
-.login-password{position:relative}.login-password input{padding-right:78px}
-.login-show{position:absolute;right:8px;top:8px;height:36px;border:0;background:transparent;color:#276d60;font-weight:650;cursor:pointer}
-.login-submit{margin-top:17px;min-height:54px;border:0;border-radius:11px;background:#176b59;color:#fff;font-weight:700;font-size:16px;cursor:pointer;box-shadow:0 8px 18px #176b5928}
+.login-password{position:relative}.login-password input{padding-right:5rem}
+.login-show{position:absolute;right:.5rem;top:.45rem;height:2.3rem;border:0;background:transparent;color:#276d60;font-weight:650;font-size:.85rem;cursor:pointer}
+.login-submit{margin-top:1rem;min-height:3.4rem;border:0;border-radius:.7rem;background:#176b59;color:#fff;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:0 .5rem 1.1rem #176b5928}
 .login-submit:hover{background:#115947}
-.login-reader{margin-top:22px;color:#176b59;text-decoration:none;font-weight:650;display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #e9eee8}
+.login-reader{margin-top:1.4rem;color:#176b59;text-decoration:none;font-weight:650;display:flex;justify-content:space-between;padding:.8rem 0;border-bottom:1px solid #e9eee8}
 .login-reader:hover{text-decoration:underline}
-.login-privacy{font-size:12px;line-height:1.5;color:#788780;margin:22px 0 0}
-@media(min-width:700px) and (max-width:1050px){.login-page main{padding:24px}.login-shell{min-height:560px;grid-template-columns:.88fr 1.12fr}.login-visual{background-image:linear-gradient(180deg,#132e2d66,#143b34dd),url('/static/login-livros-sobrepostos.svg');padding:38px}.login-visual>.login-mark{top:28px;left:30px}.login-panel{padding:46px clamp(30px,5vw,58px)}}
-@media(max-width:699px){.login-page main{padding:0;display:block}.login-shell{min-height:100vh;width:100%;display:flex;flex-direction:column;border:0;border-radius:0;box-shadow:none;background:#fffefa}.login-visual{min-height:245px;flex:0 0 245px;padding:28px 26px 25px;background-position:center 43%;background-image:linear-gradient(180deg,#132e2d33,#143b34e8),url('/static/login-estantes.svg')}.login-visual>.login-mark{top:20px;left:24px;width:44px;height:44px;border-radius:14px;font-size:25px}.login-kicker{font-size:11px;margin-bottom:7px}.login-visual h1{font-size:29px;max-width:330px;margin-bottom:7px}.login-visual>p:not(.login-kicker){font-size:14px;line-height:1.4;max-width:350px}.login-shelf-note{display:none}.login-panel{padding:27px 25px 32px;flex:1}.login-panel-brand{display:none}.login-panel h2{font-size:29px;margin:0 0 5px}.login-intro{font-size:15px;margin-bottom:19px}.login-form{gap:7px}.login-form label{margin-top:5px}.login-form input{min-height:50px}.login-submit{margin-top:13px}.login-reader{margin-top:17px}.login-privacy{margin-top:16px}}
+.login-privacy{font-size:.78rem;line-height:1.5;color:#788780;margin:1.4rem 0 0}
+@media(min-width:700px) and (max-width:1050px){html.login-page{font-size:16px}.login-page main{padding:1.5rem 0}.login-shell{width:90vw;min-height:82svh;grid-template-columns:.88fr 1.12fr}.login-visual{background-image:linear-gradient(180deg,#132e2d66,#143b34dd),url('/static/login-livros-sobrepostos.svg');padding:2.4rem}.login-visual>.login-mark{top:1.8rem;left:1.9rem}.login-visual h1{font-size:clamp(2rem,3vw,3rem);max-width:24rem}.login-panel{padding:2.5rem clamp(2rem,4vw,3.5rem)}}
+@media(max-width:699px){html.login-page{font-size:16px}.login-page main{padding:0;display:block}.login-shell{min-height:100svh;width:100%;display:flex;flex-direction:column;border:0;border-radius:0;box-shadow:none;background:#fffefa}.login-visual{min-height:15rem;flex:0 0 15rem;padding:1.7rem 1.6rem 1.5rem;background-position:center 43%;background-image:linear-gradient(180deg,#132e2d33,#143b34e8),url('/static/login-estantes.svg')}.login-visual>.login-mark{top:1.25rem;left:1.5rem;width:2.75rem;height:2.75rem;border-radius:.85rem;font-size:1.55rem}.login-kicker{font-size:.7rem;margin-bottom:.45rem}.login-visual h1{font-size:1.8rem;max-width:21rem;margin-bottom:.5rem}.login-visual>p:not(.login-kicker){font-size:.88rem;line-height:1.4;max-width:22rem}.login-shelf-note{display:none}.login-panel{padding:1.7rem 1.55rem 2rem;flex:1}.login-panel-brand{display:none}.login-panel h2{font-size:1.8rem;margin:0 0 .3rem}.login-intro{font-size:.95rem;margin-bottom:1.2rem}.login-form{gap:.45rem}.login-form label{margin-top:.35rem}.login-form input{min-height:3.1rem}.login-submit{margin-top:.8rem}.login-reader{margin-top:1rem}.login-privacy{margin-top:1rem}}
+@media(max-height:700px) and (min-width:700px){.login-page main{padding:1rem 0}.login-shell{min-height:90svh}.login-panel{padding-top:1.5rem;padding-bottom:1.5rem}.login-panel h2{margin-top:1.2rem}.login-intro{margin-bottom:1rem}.login-form{gap:.35rem}.login-form label{margin-top:.25rem}.login-form input{min-height:2.7rem;padding:.55rem .8rem}.login-submit{min-height:2.8rem;margin-top:.5rem}.login-reader{margin-top:.7rem;padding:.5rem 0}.login-privacy{margin-top:.7rem}}
+
 """
 
 
@@ -836,7 +839,7 @@ def page(titulo, corpo):
         bg = 'f7e18025'
     css_bg = 'body{background:#' + bg + '}'
     pagina_classe = 'login-page' if request.endpoint == 'entrar' else ('aba-leitores' if request.endpoint == 'leitores' else '')
-    return ('<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">'
+    return (f'<!DOCTYPE html><html lang="pt-BR" class="{pagina_classe}"><head><meta charset="UTF-8">'
             '<meta name="viewport" content="width=device-width,initial-scale=1">'
             f'<title>{esc(titulo)} · Biblioteca</title><style>{CSS}{css_bg}</style></head><body class="{pagina_classe}">'
             f'<header><strong>Biblioteca Pessoal</strong><span>{info}</span></header>'
@@ -2827,6 +2830,7 @@ if __name__ == '__main__':
             serve(app, host='127.0.0.1', port=5000, threads=4)
         else:
             app.run(host='127.0.0.1', port=5000, debug=False)
+
 
 
 
