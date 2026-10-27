@@ -1,3 +1,4 @@
+Attempting to perform the InitializeDefaultDrives operation on the 'FileSystem' provider failed.
 """Biblioteca Pessoal - sistema local (Flask + SQLite).
 
 Rodar:  python app.py   e abrir http://localhost:5000
@@ -1292,10 +1293,57 @@ document.addEventListener('DOMContentLoaded', () => {
   const usarPadrao = document.getElementById('usar_capa_cdd');
   if (usarPadrao) usarPadrao.addEventListener('change', atualizarPreviewCapaPadrao);
   const arquivoCapa = document.querySelector('input[name="capa"]');
-  if (arquivoCapa) arquivoCapa.addEventListener('change', () => {
-    if (arquivoCapa.files.length && usarPadrao) usarPadrao.checked = false;
+  const converterCapa = document.getElementById('converter-capa-webp');
+  const estadoConversao = document.getElementById('estado-conversao-capa');
+  let arquivoOriginalCapa = null;
+  let tentativaConversao = 0;
+  const tamanhoLegivel = bytes => bytes < 1024 * 1024
+    ? `${(bytes / 1024).toFixed(0)} KB` : `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+  async function criarWebp(file) {
+    const url = URL.createObjectURL(file);
+    try {
+      const imagem = new Image(); imagem.src = url; await imagem.decode();
+      const canvas = document.createElement('canvas');
+      canvas.width = imagem.naturalWidth; canvas.height = imagem.naturalHeight;
+      const contexto = canvas.getContext('2d');
+      if (!contexto) throw new Error('Não foi possível preparar a imagem para conversão.');
+      contexto.drawImage(imagem, 0, 0);
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/webp', 0.86));
+      if (!blob || blob.type !== 'image/webp') throw new Error('Este navegador não conseguiu criar WebP.');
+      const baseNome = file.name.replace(/\.[^.]+$/, '') || 'capa';
+      return new File([blob], `${baseNome}.webp`, {type: 'image/webp', lastModified: Date.now()});
+    } finally { URL.revokeObjectURL(url); }
+  }
+  async function atualizarArquivoCapa() {
+    if (!arquivoCapa) return;
+    const tentativa = ++tentativaConversao, original = arquivoOriginalCapa;
+    if (!original) { if (estadoConversao) estadoConversao.textContent = ''; return; }
+    if (usarPadrao) usarPadrao.checked = false;
+    if (!converterCapa || !converterCapa.checked || original.type === 'image/webp') {
+      const lista = new DataTransfer(); lista.items.add(original); arquivoCapa.files = lista.files;
+      if (estadoConversao) estadoConversao.textContent = original.type === 'image/webp'
+        ? `O ficheiro já é WebP (${tamanhoLegivel(original.size)}).`
+        : `Formato original mantido (${tamanhoLegivel(original.size)}).`;
+      atualizarPreviewCapaPadrao(); return;
+    }
+    if (estadoConversao) estadoConversao.textContent = 'A converter nesta máquina…';
+    try {
+      const convertido = await criarWebp(original);
+      if (tentativa !== tentativaConversao) return;
+      const lista = new DataTransfer(); lista.items.add(convertido); arquivoCapa.files = lista.files;
+      const reducao = original.size ? Math.round((1 - convertido.size / original.size) * 100) : 0;
+      if (estadoConversao) estadoConversao.textContent = `WebP criado: ${tamanhoLegivel(convertido.size)} (${reducao > 0 ? `${reducao}% menor` : 'tamanho semelhante'}).`;
+    } catch (erro) {
+      if (tentativa !== tentativaConversao) return;
+      const lista = new DataTransfer(); lista.items.add(original); arquivoCapa.files = lista.files;
+      if (estadoConversao) estadoConversao.textContent = `${erro.message} O ficheiro original foi mantido.`;
+    }
     atualizarPreviewCapaPadrao();
+  }
+  if (arquivoCapa) arquivoCapa.addEventListener('change', () => {
+    arquivoOriginalCapa = arquivoCapa.files[0] || null; atualizarArquivoCapa();
   });
+  if (converterCapa) converterCapa.addEventListener('change', atualizarArquivoCapa);
   if (usarPadrao && usarPadrao.checked) atualizarPreviewCapaPadrao();
   ['titulo', 'autor'].forEach(id => {
     const el = document.getElementById(id);
@@ -1482,6 +1530,9 @@ def form_livro(v, action):
     <form method="post" action="{action}" enctype="multipart/form-data" class="folha form-cadastro">
       <div class="folha-topo">
         <div class="folha-capa">{capa}<br><input type="file" name="capa" accept="image/*">
+          <label class="fr-nota"><input type="checkbox" id="converter-capa-webp"> Converter a imagem para WebP neste computador</label>
+          <small class="fr-nota">Opcional: o navegador converte a imagem antes de a guardar, sem instalar outro programa. WebP costuma ocupar menos espaço; SVG não é adequado para fotografias de capas.</small>
+          <small id="estado-conversao-capa" class="fr-nota" aria-live="polite"></small>
           <br><button type="button" class="btn" onclick="buscarCapas()">Buscar capa na internet</button>
           <input type="hidden" name="capa_url" id="capa_url">
           <img id="capa-preview" class="capa capa-3d" style="display:none">
@@ -1545,22 +1596,22 @@ def inserir_livro(d, c=None):
 
 
 def salvar_capa(arquivo, livro_id):
+    """Valida o conteúdo da imagem e grava-a localmente com a extensão detetada."""
     if not arquivo or not arquivo.filename:
-        return None
-    ext_nome = arquivo.filename.rsplit('.', 1)[-1].lower() if '.' in arquivo.filename else ''
-    if ext_nome not in EXT_CAPA:
         return None
     dados = arquivo.stream.read(MAX_CAPA_BYTES + 1)
     if len(dados) > MAX_CAPA_BYTES:
+        flash('A capa excede o limite de 5 MB; o registo será guardado sem essa imagem.')
         return None
-    ext = validar_imagem(dados, arquivo.mimetype)
+    # A assinatura do ficheiro é a fonte de verdade; o nome pode ter extensão errada ou nenhuma.
+    ext = validar_imagem(dados)
     if not ext:
+        flash('Formato de capa não suportado. Use PNG, JPG, GIF ou WebP.')
         return None
     nome = f'{livro_id}.{ext}'
     with open(os.path.join(CAPAS, nome), 'wb') as f:
         f.write(dados)
     return nome
-
 
 @app.route('/acervo')
 @area('acervo')
@@ -2731,3 +2782,4 @@ if __name__ == '__main__':
             serve(app, host='127.0.0.1', port=5000, threads=4)
         else:
             app.run(host='127.0.0.1', port=5000, debug=False)
+
