@@ -1,4 +1,3 @@
-Attempting to perform the InitializeDefaultDrives operation on the 'FileSystem' provider failed.
 """Biblioteca Pessoal - sistema local (Flask + SQLite).
 
 Rodar:  python app.py   e abrir http://localhost:5000
