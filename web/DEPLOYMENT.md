@@ -25,5 +25,3 @@ A página inicial permite criar uma nova biblioteca privada. Para inserir algué
 A base SQLite existente não foi migrada. O Supabase começa sem livros, leitores ou utilizadores; cada novo cadastro cria o seu próprio espaço. A classificação CDD do projeto foi carregada na tabela pública de referência.
 
 Ao publicar uma atualização, o Pages compila automaticamente cada commit no ramo main que altere ficheiros dentro de web/.
-
-O Pages compila commits no ramo `main`; não há filtro por caminho para evitar descartar atualizações do site.
