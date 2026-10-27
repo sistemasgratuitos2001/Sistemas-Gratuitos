@@ -740,7 +740,7 @@ def gerar_chamada(cdd, autor):
 # ---------------------------------------------------------------- layout
 
 CSS = """
-body{font-family:system-ui,"Segoe UI",sans-serif;margin:0;background:#f9e79a5c;color:#263238;font-size:16px;line-height:1.5}
+body{font-family:system-ui,"Segoe UI",sans-serif;margin:0;background:#f7e1802e;color:#263238;font-size:16px;line-height:1.5}
 header{background:#1f3a5f;color:#fff;padding:10px 16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
 header a{color:#fff}
 nav{background:#17304f;padding:0 12px;display:flex;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin}
@@ -748,6 +748,7 @@ nav a{color:#cfe0f5;padding:10px 12px;text-decoration:none;font-size:16px;white-
 nav a.ativo{color:#fff;border-bottom:2px solid #fff}
 main{padding:16px;max-width:1150px;margin:auto}
 .card{background:#42c8b175;border-radius:8px;padding:16px;margin-bottom:16px;box-shadow:0 1px 3px #0001}
+.aba-leitores .card{background:#42c8b146}
 table{width:100%;border-collapse:collapse;font-size:16px;line-height:1.4}
 th,td{text-align:left;padding:6px;border-bottom:1px solid #eee;vertical-align:middle}
 tr.atrasado{background:#fde9e7} tr.devolvido{color:#888}
@@ -758,7 +759,8 @@ input,select{padding:8px 9px;margin:3px 0;border:1px solid #ccc;border-radius:4p
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-bottom:8px}
 .grid label{font-size:16px;display:flex;flex-direction:column}
 .capa{height:84px;border-radius:2px}
-.capa-3d{transform:perspective(600px) rotateY(-16deg) rotateX(2deg);transform-origin:left center;box-shadow:8px 6px 14px #0004}
+.capa-3d{transform:perspective(600px) rotateY(-16deg) rotateX(2deg);transform-origin:left center;box-shadow:8px 6px 14px #0004;position:relative;z-index:1;transition:transform .18s ease,box-shadow .18s ease;cursor:zoom-in}
+.capa-3d:hover{transform:perspective(600px) rotateY(-16deg) rotateX(2deg) scale(1.4);z-index:10;box-shadow:12px 10px 22px #0006}
 .capa-vazia{height:84px;width:60px;background:#8c6d46;color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;font-size:10px;font-family:Georgia,serif;border-radius:2px;box-shadow:6px 4px 10px #0003;transform:perspective(600px) rotateY(-16deg);padding:4px}
 .folha{background:#fdfaf3;font-family:Georgia,'Times New Roman',serif;border:1px solid #d8cdb4;padding:24px;border-radius:4px}
 .folha-topo{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;border-bottom:1px double #8c6d46;padding-bottom:16px;margin-bottom:12px}
@@ -769,7 +771,8 @@ input,select{padding:8px 9px;margin:3px 0;border:1px solid #ccc;border-radius:4p
 .fr-campo input{font-family:Georgia,serif;font-size:17px;background:transparent;border:none;border-bottom:1px solid #b9a77f;border-radius:0;color:#263238}
 .fr-nota{font-style:normal;color:#3a464b;font-size:14px;line-height:1.5}
 input::placeholder{color:#58666b;opacity:1}\ninput[list]::-webkit-calendar-picker-indicator{display:none !important}
-.capa-opcao{height:70px;margin:4px;cursor:pointer;border:2px solid transparent;border-radius:2px}
+.capa-opcao{height:70px;margin:4px;cursor:zoom-in;border:2px solid transparent;border-radius:2px;position:relative;transition:transform .18s ease}
+.capa-opcao:hover{transform:scale(1.4);z-index:10}
 .capa-opcao.escolhida{border-color:#1f3a5f}
 #capa-preview,#capa-padrao-preview{height:336px !important;max-width:min(100%,280px);width:auto;object-fit:contain;margin:10px 8px;vertical-align:top}
 .reader-hero{background:linear-gradient(135deg,#edf4f1,#f8f5ec);border:1px solid #d7e4dc;border-radius:10px;padding:20px;margin-bottom:16px}
@@ -796,13 +799,14 @@ def page(titulo, corpo):
         links += f'<a href="{url_for("minha_conta")}">Área do leitor</a>'
         info = f'{esc(session["nome"])} · <form method="post" action="{url_for("sair")}" style="display:inline"><button class="btn">Sair</button></form>'
     avisos = ''.join(f'<div class="aviso">{esc(m)}</div>' for m in get_flashed_messages())
-    bg = request.args.get('bg', 'f7e1805c')
+    bg = request.args.get('bg', 'f7e1802e')
     if not re.fullmatch(r'(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{8})', bg):
-        bg = 'f7e1805c'
+        bg = 'f7e1802e'
     css_bg = 'body{background:#' + bg + '}'
+    pagina_classe = 'aba-leitores' if request.endpoint == 'leitores' else ''
     return ('<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">'
             '<meta name="viewport" content="width=device-width,initial-scale=1">'
-            f'<title>{esc(titulo)} · Biblioteca</title><style>{CSS}{css_bg}</style></head><body>'
+            f'<title>{esc(titulo)} · Biblioteca</title><style>{CSS}{css_bg}</style></head><body class="{pagina_classe}">'
             f'<header><strong>Biblioteca Pessoal</strong><span>{info}</span></header>'
             f'<nav>{links}</nav><main>{avisos}{corpo}</main>'
             f'{SCRIPT_BASE.replace("__CSRF_TOKEN__", esc(session["_csrf_token"]))}</body></html>')
@@ -902,8 +906,8 @@ def trocar_senha_usuario():
     if request.method == 'POST':
         nova=request.form.get('nova') or ''
         confirmacao=request.form.get('confirmacao') or ''
-        if len(nova)<12:
-            flash('A senha deve ter pelo menos 12 caracteres.')
+        if len(nova)<8:
+            flash('A senha deve ter pelo menos 8 caracteres.')
         elif nova!=confirmacao:
             flash('A confirmação da senha não coincide.')
         else:
@@ -914,8 +918,8 @@ def trocar_senha_usuario():
             return redirect(url_for('acervo'))
     corpo=f'''<div class="card" style="max-width:480px;margin:32px auto"><h2>Defina a sua senha</h2>
       <p>A senha temporária precisa ser substituída antes de continuar.</p>
-      <form method="post"><label>Nova senha<br><input name="nova" type="password" minlength="12" required autocomplete="new-password"></label><br>
-      <label>Confirme a senha<br><input name="confirmacao" type="password" minlength="12" required autocomplete="new-password"></label><br>
+      <form method="post"><label>Nova senha<br><input name="nova" type="password" minlength="8" required autocomplete="new-password"></label><br>
+      <label>Confirme a senha<br><input name="confirmacao" type="password" minlength="8" required autocomplete="new-password"></label><br>
       <button class="btn">Guardar senha</button></form></div>'''
     return page('Definir senha',corpo)
 
@@ -984,8 +988,8 @@ def minha_conta():
           <p>Por segurança, a senha inicial deve ser substituída antes de usar a área privada.</p>
           <form method="post" action="{url_for('senha_propria_leitor')}">
             <input type="hidden" name="troca_inicial" value="1">
-            <label>Nova senha<br><input name="nova" type="password" minlength="12" required autocomplete="new-password"></label><br>
-            <label>Confirme a senha<br><input name="confirmacao" type="password" minlength="12" required autocomplete="new-password"></label><br>
+            <label>Nova senha<br><input name="nova" type="password" minlength="8" required autocomplete="new-password"></label><br>
+            <label>Confirme a senha<br><input name="confirmacao" type="password" minlength="8" required autocomplete="new-password"></label><br>
             <button class="btn">Guardar senha</button>
           </form></div>'''
         return page('Definir senha', corpo)
@@ -1053,8 +1057,8 @@ def minha_conta():
     <div class="card"><h2>Alterar senha</h2>
       <form method="post" action="{url_for('senha_propria_leitor')}">
         <label>Senha atual <input type="password" name="atual" required autocomplete="current-password"></label>
-        <label>Nova senha <input type="password" name="nova" minlength="12" required autocomplete="new-password"></label>
-        <label>Confirmar senha <input type="password" name="confirmacao" minlength="12" required autocomplete="new-password"></label>
+        <label>Nova senha <input type="password" name="nova" minlength="8" required autocomplete="new-password"></label>
+        <label>Confirmar senha <input type="password" name="confirmacao" minlength="8" required autocomplete="new-password"></label>
         <button class="btn">Guardar nova senha</button>
       </form>
     </div>"""
@@ -1100,8 +1104,8 @@ def senha_propria_leitor():
     troca_inicial = bool(leitor['senha_temporaria']) and request.form.get('troca_inicial') == '1'
     if not troca_inicial and not check_password_hash(leitor['senha'], atual):
         flash('A senha atual não confere.')
-    elif len(nova) < 12:
-        flash('A nova senha precisa de pelo menos 12 caracteres.')
+    elif len(nova) < 8:
+        flash('A nova senha precisa de pelo menos 8 caracteres.')
     elif nova != confirmacao:
         flash('A confirmação da senha não coincide.')
     else:
@@ -2354,13 +2358,13 @@ def usuarios():
                 f'<input name="senha" type="password" placeholder="Nova senha"> <button class="btn">Trocar</button></form> '
                 f'{excluir}</td></tr>')
     corpo = f"""
-    <div class="aviso">Senhas temporárias são substituídas no primeiro acesso. Use pelo menos 12 caracteres.</div>
+    <div class="aviso">Senhas temporárias são substituídas no primeiro acesso. Use pelo menos 8 caracteres.</div>
     <div class="card">
       <h3>Novo colaborador</h3>
       <form method="post" class="form-cadastro" action="{url_for('novo_usuario')}">
         <div class="grid">
           <input name="nome" placeholder="Nome *" required>
-          <input name="senha" type="password" placeholder="Senha (mínimo 12 caracteres)">
+          <input name="senha" type="password" placeholder="Senha (mínimo 8 caracteres)">
         </div>
         <p>Permissões:</p>
         <div class="grid">{checks}<label><input type="checkbox" name="admin" value="1"> <strong>Administrador (tudo)</strong></label></div>
@@ -2418,8 +2422,8 @@ def novo_usuario():
     if not nome:
         flash('Informe o nome.')
         return redirect(url_for('usuarios'))
-    if len(senha) < 12:
-        flash('A senha do colaborador deve ter pelo menos 12 caracteres.')
+    if len(senha) < 8:
+        flash('A senha do colaborador deve ter pelo menos 8 caracteres.')
         return redirect(url_for('usuarios'))
     perms = [p for p in request.form.getlist('perms') if p in AREAS]
     admin = 1 if request.form.get('admin') else 0
@@ -2439,8 +2443,8 @@ def novo_usuario():
 def senha_usuario(id):
     nova = request.form.get('senha', '')
     u = row("SELECT nome FROM usuarios WHERE id = ?", (id,))
-    if u and len(nova) < 12:
-        flash('A senha deve ter pelo menos 12 caracteres.')
+    if u and len(nova) < 8:
+        flash('A senha deve ter pelo menos 8 caracteres.')
         return redirect(url_for('usuarios'))
     if u:
         run("UPDATE usuarios SET senha = ?, senha_temporaria=0 WHERE id = ?", (generate_password_hash(nova), id))
@@ -2781,5 +2785,6 @@ if __name__ == '__main__':
             serve(app, host='127.0.0.1', port=5000, threads=4)
         else:
             app.run(host='127.0.0.1', port=5000, debug=False)
+
 
 
