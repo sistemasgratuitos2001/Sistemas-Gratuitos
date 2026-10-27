@@ -37,7 +37,7 @@ export default function App(){
 }
 
 function Workspace({session}){
-  const [library,setLibrary]=useState(null),[role,setRole]=useState(""),[profile,setProfile]=useState(null),[page,setPage]=useState("home");
+  const [library,setLibrary]=useState(null),[libraryOptions,setLibraryOptions]=useState([]),[role,setRole]=useState(""),[profile,setProfile]=useState(null),[page,setPage]=useState("home");
   const [books,setBooks]=useState([]),[readers,setReaders]=useState([]),[loans,setLoans]=useState([]),[reservations,setReservations]=useState([]),[notifications,setNotifications]=useState([]);
   const [loading,setLoading]=useState(true),[notice,setNotice]=useState(""),[busy,setBusy]=useState(false),[search,setSearch]=useState("");
   const isStaff=["owner","admin","staff"].includes(role);
@@ -45,7 +45,7 @@ function Workspace({session}){
     setLoading(true);setNotice("");
     try{
       const {data:members,error:mErr}=await supabase.from("library_members").select("library_id,role,libraries(id,name)").eq("user_id",session.user.id);if(mErr)throw mErr;
-      const member=members?.[0];if(!member)throw new Error("Esta conta ainda não está ligada a uma biblioteca. Confirme o e-mail ou use o convite correto.");
+      const selectionKey="biblioteca:library:"+session.user.id;const chosen=localStorage.getItem(selectionKey);const member=(members||[]).find(m=>m.library_id===chosen)||(members||[])[0];if(!member)throw new Error("Esta conta ainda não está ligada a uma biblioteca. Confirme o e-mail ou use o convite correto.");localStorage.setItem(selectionKey,member.library_id);setLibraryOptions(members||[]);
       const lib=member.libraries;setLibrary(lib);setRole(member.role);
       const {data:p}=await supabase.from("profiles").select("display_name").eq("id",session.user.id).maybeSingle();setProfile(p);
       const res=await Promise.all([
@@ -60,7 +60,7 @@ function Workspace({session}){
       setBooks(raw.map(b=>({...b,cover_url:signed[b.cover_path]||""})));setReaders(res[1].data||[]);setLoans(res[2].data||[]);setReservations(res[3].data||[]);setNotifications(res[4].data||[]);
     }catch(e){setNotice(msg(e));}finally{setLoading(false);}
   }
-  useEffect(()=>{loadData();},[session.user.id]);
+  useEffect(()=>{const invitation=new URLSearchParams(location.search).get("invite");if(!invitation){loadData();return;}let active=true;(async()=>{setLoading(true);const {data,error}=await supabase.rpc("accept_invite",{p_token:invitation});history.replaceState({},document.title,location.pathname);if(error){await loadData();if(active)setNotice(msg(error));return;}localStorage.setItem("biblioteca:library:"+session.user.id,data);setPage("home");await loadData();if(active)setNotice("Convite aceite. A biblioteca foi adicionada à sua conta.");})();return()=>{active=false;};},[session.user.id]);
   async function run(fn){setBusy(true);setNotice("");try{const result=await fn();await loadData();return result;}catch(e){setNotice(msg(e));return null;}finally{setBusy(false);}}
   if(loading&&!library)return <main className="loading-screen">A carregar os seus dados privados…</main>;
   if(!library)return <main className="auth-shell"><section className="auth-card"><h1>Biblioteca indisponível</h1><p role="alert">{notice}</p><button className="button primary" onClick={loadData}>Tentar novamente</button><button className="text-button" onClick={()=>supabase.auth.signOut()}>Terminar sessão</button></section></main>;
@@ -68,7 +68,7 @@ function Workspace({session}){
   const active=loans.filter(l=>l.status==="active"),late=active.filter(l=>l.due_at<new Date().toISOString().slice(0,10));
   const shown=books.filter(b=>!search||clean([b.title,b.author,b.isbn,b.cdd].join(" ")).includes(clean(search)));
   return <div className="app-shell"><aside className="sidebar"><a className="brand" href="#" onClick={e=>{e.preventDefault();setPage("home");}}><span className="brand-mark small">B</span><span><strong>Biblioteca</strong><small>{library.name}</small></span></a><nav aria-label="Navegação principal">{menu.map(([id,label])=><button key={id} className={"nav-item "+(page===id?"selected":"")} onClick={()=>{setPage(id);setSearch("");}}>{label}</button>)}</nav><div className="sidebar-footer"><span className="avatar">{(profile?.display_name||session.user.email||"B").slice(0,1).toUpperCase()}</span><div className="user-label"><strong>{profile?.display_name||session.user.email}</strong><small>{roleName(role)}</small></div><button className="icon-button" onClick={()=>supabase.auth.signOut()} aria-label="Terminar sessão" title="Terminar sessão">↗</button></div></aside>
-    <main className="content"><header className="topbar"><div><p className="eyebrow">{library.name}</p><h1>{menu.find(x=>x[0]===page)?.[1]||"Biblioteca"}</h1></div><div className="top-actions"><span className="status-pill"><i/>Dados privados</span><button className="button secondary" onClick={loadData}>Atualizar</button></div></header>
+    <main className="content"><header className="topbar"><div><p className="eyebrow">{library.name}</p><h1>{menu.find(x=>x[0]===page)?.[1]||"Biblioteca"}</h1>{libraryOptions.length>1&&<label className="library-switcher"><span>Biblioteca ativa</span><select value={library.id} onChange={async e=>{localStorage.setItem("biblioteca:library:"+session.user.id,e.target.value);setPage("home");await loadData();}}>{libraryOptions.map(m=><option key={m.library_id} value={m.library_id}>{m.libraries?.name||"Biblioteca"}</option>)}</select></label>}</div><div className="top-actions"><span className="status-pill"><i/>Dados privados</span><button className="button secondary" onClick={loadData}>Atualizar</button></div></header>
       {notice&&<div className="notice page-notice" role="status"><span>{notice}</span><button className="icon-button" onClick={()=>setNotice("")} aria-label="Fechar aviso">×</button></div>}{loading&&<p className="muted">A atualizar…</p>}
       {page==="home"&&<Dashboard profile={profile} books={books} readers={readers} active={active} late={late} reservations={reservations} notifications={notifications} isStaff={isStaff} setPage={setPage}/>}
       {page==="catalog"&&<Catalog books={shown} allBooks={books} loans={loans} readers={readers} library={library} role={role} isStaff={isStaff} run={run} busy={busy} setNotice={setNotice} search={search} setSearch={setSearch}/>}
