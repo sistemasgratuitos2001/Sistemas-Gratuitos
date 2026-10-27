@@ -760,7 +760,7 @@ input,select{padding:8px 9px;margin:3px 0;border:1px solid #ccc;border-radius:4p
 .grid label{font-size:16px;display:flex;flex-direction:column}
 .capa{height:84px;border-radius:2px}
 .capa-3d{transform:perspective(600px) rotateY(-16deg) rotateX(2deg);transform-origin:left center;box-shadow:8px 6px 14px #0004;position:relative;z-index:1;transition:transform .18s ease,box-shadow .18s ease;cursor:zoom-in}
-.capa-3d:hover{transform:perspective(600px) rotateY(-16deg) rotateX(2deg) scale(2);z-index:10;box-shadow:12px 10px 22px #0006}
+.capa-3d:hover{transform:perspective(600px) rotateY(-16deg) rotateX(2deg) scale(3);z-index:10;box-shadow:12px 10px 22px #0006}
 .capa-vazia{height:84px;width:60px;background:#8c6d46;color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;font-size:10px;font-family:Georgia,serif;border-radius:2px;box-shadow:6px 4px 10px #0003;transform:perspective(600px) rotateY(-16deg);padding:4px}
 .folha{background:#fdfaf3;font-family:Georgia,'Times New Roman',serif;border:1px solid #d8cdb4;padding:24px;border-radius:4px}
 .folha-topo{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;border-bottom:1px double #8c6d46;padding-bottom:16px;margin-bottom:12px}
@@ -772,7 +772,7 @@ input,select{padding:8px 9px;margin:3px 0;border:1px solid #ccc;border-radius:4p
 .fr-nota{font-style:normal;color:#3a464b;font-size:14px;line-height:1.5}
 input::placeholder{color:#58666b;opacity:1}\ninput[list]::-webkit-calendar-picker-indicator{display:none !important}
 .capa-opcao{height:70px;margin:4px;cursor:zoom-in;border:2px solid transparent;border-radius:2px;position:relative;transition:transform .18s ease}
-.capa-opcao:hover{transform:scale(2);z-index:10}
+.capa-opcao:hover{transform:scale(3);z-index:10}
 .capa-opcao.escolhida{border-color:#1f3a5f}
 #capa-preview,#capa-padrao-preview{height:336px !important;max-width:min(100%,280px);width:auto;object-fit:contain;margin:10px 8px;vertical-align:top}
 .reader-hero{background:linear-gradient(135deg,#edf4f1,#f8f5ec);border:1px solid #d7e4dc;border-radius:10px;padding:20px;margin-bottom:16px}
@@ -2785,6 +2785,7 @@ if __name__ == '__main__':
             serve(app, host='127.0.0.1', port=5000, threads=4)
         else:
             app.run(host='127.0.0.1', port=5000, debug=False)
+
 
 
 
