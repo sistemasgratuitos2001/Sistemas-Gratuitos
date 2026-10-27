@@ -1309,7 +1309,7 @@ document.addEventListener('DOMContentLoaded', () => {
       contexto.drawImage(imagem, 0, 0);
       const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/webp', 0.86));
       if (!blob || blob.type !== 'image/webp') throw new Error('Este navegador não conseguiu criar WebP.');
-      const baseNome = file.name.replace(/\.[^.]+$/, '') || 'capa';
+      const baseNome = file.name.replace(/\\.[^.]+$/, '') || 'capa';
       return new File([blob], `${baseNome}.webp`, {type: 'image/webp', lastModified: Date.now()});
     } finally { URL.revokeObjectURL(url); }
   }
@@ -2781,4 +2781,5 @@ if __name__ == '__main__':
             serve(app, host='127.0.0.1', port=5000, threads=4)
         else:
             app.run(host='127.0.0.1', port=5000, debug=False)
+
 
