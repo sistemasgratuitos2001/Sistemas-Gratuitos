@@ -1,0 +1,9 @@
+create index if not exists audit_events_actor_idx on public.audit_events(actor_id);
+create index if not exists books_created_by_idx on public.books(created_by);
+create index if not exists loans_book_fk_idx on public.loans(book_id);
+create index if not exists loans_created_by_idx on public.loans(created_by);
+create index if not exists loans_reader_fk_idx on public.loans(reader_id);
+create index if not exists notifications_reader_fk_idx on public.notifications(reader_id);
+create index if not exists reservations_reader_fk_idx on public.reservations(reader_id);
+create index if not exists team_invites_invited_by_idx on public.team_invites(invited_by);
+create index if not exists team_invites_library_idx on public.team_invites(library_id);

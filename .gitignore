@@ -1,0 +1,33 @@
+# Segredos e dados de cada instalação
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+!/web/.env.example
+
+# Banco e configuração local
+/biblioteca.db
+/*.db
+/email.json
+/capas/
+/_backups/
+/biblioteca/
+/catalogo_livros_teste*.csv
+
+# Dependências e build web
+/web/node_modules/
+/web/dist/
+/web/.env
+/web/.env.*
+!/web/.env.example
+
+# Artefactos do sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+/cdd_thumbs/*.svg
+
+/*.db-*
+/.upload-files.json
