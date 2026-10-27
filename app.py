@@ -816,6 +816,37 @@ body.login-page{background:#f7f1df;color:#173b37;min-height:100vh}
 @media(max-width:699px){html.login-page{font-size:16px}.login-page main{padding:0;display:block}.login-shell{min-height:100svh;width:100%;display:flex;flex-direction:column;border:0;border-radius:0;box-shadow:none;background:#fffefa}.login-visual{min-height:15rem;flex:0 0 15rem;padding:1.7rem 1.6rem 1.5rem;background-position:center 43%;background-image:linear-gradient(180deg,#132e2d33,#143b34e8),url('/static/login-estantes.svg')}.login-visual>.login-mark{top:1.25rem;left:1.5rem;width:2.75rem;height:2.75rem;border-radius:.85rem;font-size:1.55rem}.login-kicker{font-size:.7rem;margin-bottom:.45rem}.login-visual h1{font-size:1.8rem;max-width:21rem;margin-bottom:.5rem}.login-visual>p:not(.login-kicker){font-size:.88rem;line-height:1.4;max-width:22rem}.login-shelf-note{display:none}.login-panel{padding:1.7rem 1.55rem 2rem;flex:1}.login-panel-brand{display:none}.login-panel h2{font-size:1.8rem;margin:0 0 .3rem}.login-intro{font-size:.95rem;margin-bottom:1.2rem}.login-form{gap:.45rem}.login-form label{margin-top:.35rem}.login-form input{min-height:3.1rem}.login-submit{margin-top:.8rem}.login-reader{margin-top:1rem}.login-privacy{margin-top:1rem}}
 @media(max-height:700px) and (min-width:700px){.login-page main{padding:1rem 0}.login-shell{min-height:90svh}.login-panel{padding-top:1.5rem;padding-bottom:1.5rem}.login-panel h2{margin-top:1.2rem}.login-intro{margin-bottom:1rem}.login-form{gap:.35rem}.login-form label{margin-top:.25rem}.login-form input{min-height:2.7rem;padding:.55rem .8rem}.login-submit{min-height:2.8rem;margin-top:.5rem}.login-reader{margin-top:.7rem;padding:.5rem 0}.login-privacy{margin-top:.7rem}}
 
+/* Escala 70% para as áreas internas; login mantém a escala e o layout próprios. */
+html:not(.login-page){font-size:70%}
+body:not(.login-page){font-size:1rem}
+body:not(.login-page) header{padding:.44rem .69rem;gap:.35rem}
+body:not(.login-page) nav{padding:0 .525rem}
+body:not(.login-page) nav a{padding:.44rem .525rem;font-size:1rem}
+body:not(.login-page) main{padding:.7rem;max-width:71.875rem}
+body:not(.login-page) .card{padding:.7rem;margin-bottom:.7rem;border-radius:.35rem}
+body:not(.login-page) table{font-size:1rem}
+body:not(.login-page) th,body:not(.login-page) td{padding:.2625rem;border-bottom-width:1px}
+body:not(.login-page) input,body:not(.login-page) select{padding:.35rem .394rem;margin:.13rem 0;border-radius:.175rem;font-size:1rem}
+body:not(.login-page) .btn{padding:.35rem .569rem;border-radius:.175rem;margin:.0875rem 0;font-size:1rem}
+body:not(.login-page) .grid{grid-template-columns:repeat(auto-fit,minmax(8.75rem,1fr));gap:.35rem;margin-bottom:.35rem}
+body:not(.login-page) .grid label{font-size:1rem}
+body:not(.login-page) .capa,body:not(.login-page) .capa-vazia{height:5.25rem}
+body:not(.login-page) .capa-vazia{width:3.75rem;padding:.25rem;font-size:.625rem}
+body:not(.login-page) .capa-opcao{height:4.375rem;margin:.25rem}
+body:not(.login-page) #capa-preview,body:not(.login-page) #capa-padrao-preview{height:14.7rem !important;max-width:min(100%,12.25rem)}
+body:not(.login-page) .folha{padding:1.05rem;border-radius:.175rem}
+body:not(.login-page) .folha-topo{gap:1.05rem;padding-bottom:.7rem;margin-bottom:.525rem}
+body:not(.login-page) .folha-capa{min-width:5.25rem;padding:.4375rem 0 0 .4375rem}
+body:not(.login-page) .folha-texto{min-width:11.375rem}
+body:not(.login-page) .fr-linha{margin:.2625rem 0}
+body:not(.login-page) .fr-campo{font-size:.875rem}
+body:not(.login-page) .fr-campo input{font-size:1.05rem}
+body:not(.login-page) .fr-nota{font-size:.875rem}
+body:not(.login-page) .reader-status{padding:.175rem .394rem;font-size:.875rem}
+body:not(.login-page) .reader-hero{padding:.875rem;margin-bottom:.7rem;border-radius:.35rem}
+body:not(.login-page) .reader-grid{grid-template-columns:repeat(auto-fit,minmax(9.1875rem,1fr));gap:.525rem}
+body:not(.login-page) .reader-tile{padding:.6125rem;border-radius:.35rem}
+
 """
 
 
@@ -2830,6 +2861,7 @@ if __name__ == '__main__':
             serve(app, host='127.0.0.1', port=5000, threads=4)
         else:
             app.run(host='127.0.0.1', port=5000, debug=False)
+
 
 
 
