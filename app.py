@@ -781,6 +781,38 @@ input::placeholder{color:#58666b;opacity:1}\ninput[list]::-webkit-calendar-picke
 .reader-status{display:inline-block;padding:4px 9px;border-radius:20px;background:#e8f3ed;color:#24543a;font-size:14px}
 @media(max-width:600px){#capa-preview,#capa-padrao-preview{height:300px !important;max-width:100%}}
 @media print{header,nav,.naoimprime,.btn,input,select{display:none !important}main{padding:0}}
+
+/* Entrada responsiva: computador, tablet e telemóvel */
+body.login-page{background:#f7f1df;color:#173b37;min-height:100vh}
+.login-page header,.login-page nav{display:none}
+.login-page main{max-width:none;min-height:100vh;padding:36px;display:grid;place-items:center}
+.login-page .aviso{width:min(100%,1080px);box-sizing:border-box;margin:0 auto 12px}
+.login-shell{width:min(1080px,100%);min-height:620px;display:grid;grid-template-columns:1.04fr .96fr;background:#fffefa;border-radius:22px;overflow:hidden;box-shadow:0 24px 70px #173b3722;border:1px solid #e9e2d1}
+.login-visual{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;padding:54px;color:#fff;background:linear-gradient(180deg,#132e2dcc 0%,#163b36aa 50%,#143b34ee 100%),url('/static/login-estantes.svg') center/cover no-repeat}
+.login-mark{width:58px;height:58px;border-radius:18px;background:#218b73;color:white;display:grid;place-items:center;font-size:32px;font-weight:800;box-shadow:0 9px 24px #052a2833}
+.login-visual>.login-mark{position:absolute;top:38px;left:42px}
+.login-kicker{font-size:13px;letter-spacing:.18em;font-weight:750;margin:0 0 12px;color:#d3ede2}
+.login-visual h1{font-size:clamp(34px,4vw,52px);line-height:1.08;max-width:430px;margin:0 0 14px;letter-spacing:-.035em}
+.login-visual>p:not(.login-kicker){font-size:18px;line-height:1.55;max-width:390px;color:#ecf4ef;margin:0}
+.login-shelf-note{font-size:13px;color:#d8e8df;margin-top:34px}
+.login-panel{padding:64px clamp(36px,6vw,76px);display:flex;flex-direction:column;justify-content:center}
+.login-panel-brand{display:flex;align-items:center;gap:12px;text-transform:uppercase;letter-spacing:.12em;font-size:13px;font-weight:750;color:#275f53}
+.login-mark.small{width:42px;height:42px;border-radius:13px;font-size:24px}
+.login-panel h2{font-size:34px;line-height:1.2;margin:34px 0 6px;letter-spacing:-.025em;color:#173b37}
+.login-intro{color:#64766f;margin:0 0 28px;font-size:16px}
+.login-form{display:flex;flex-direction:column;gap:9px}
+.login-form label{font-size:14px;font-weight:650;margin-top:7px}
+.login-form input{width:100%;box-sizing:border-box;padding:14px 15px;margin:0;border:1px solid #d8dfd7;border-radius:10px;background:#fff;color:#173b37;font-size:16px;min-height:52px}
+.login-form input:focus{outline:3px solid #218b7330;border-color:#218b73}
+.login-password{position:relative}.login-password input{padding-right:78px}
+.login-show{position:absolute;right:8px;top:8px;height:36px;border:0;background:transparent;color:#276d60;font-weight:650;cursor:pointer}
+.login-submit{margin-top:17px;min-height:54px;border:0;border-radius:11px;background:#176b59;color:#fff;font-weight:700;font-size:16px;cursor:pointer;box-shadow:0 8px 18px #176b5928}
+.login-submit:hover{background:#115947}
+.login-reader{margin-top:22px;color:#176b59;text-decoration:none;font-weight:650;display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #e9eee8}
+.login-reader:hover{text-decoration:underline}
+.login-privacy{font-size:12px;line-height:1.5;color:#788780;margin:22px 0 0}
+@media(min-width:700px) and (max-width:1050px){.login-page main{padding:24px}.login-shell{min-height:560px;grid-template-columns:.88fr 1.12fr}.login-visual{background-image:linear-gradient(180deg,#132e2d66,#143b34dd),url('/static/login-livros-sobrepostos.svg');padding:38px}.login-visual>.login-mark{top:28px;left:30px}.login-panel{padding:46px clamp(30px,5vw,58px)}}
+@media(max-width:699px){.login-page main{padding:0;display:block}.login-shell{min-height:100vh;width:100%;display:flex;flex-direction:column;border:0;border-radius:0;box-shadow:none;background:#fffefa}.login-visual{min-height:245px;flex:0 0 245px;padding:28px 26px 25px;background-position:center 43%;background-image:linear-gradient(180deg,#132e2d33,#143b34e8),url('/static/login-estantes.svg')}.login-visual>.login-mark{top:20px;left:24px;width:44px;height:44px;border-radius:14px;font-size:25px}.login-kicker{font-size:11px;margin-bottom:7px}.login-visual h1{font-size:29px;max-width:330px;margin-bottom:7px}.login-visual>p:not(.login-kicker){font-size:14px;line-height:1.4;max-width:350px}.login-shelf-note{display:none}.login-panel{padding:27px 25px 32px;flex:1}.login-panel-brand{display:none}.login-panel h2{font-size:29px;margin:0 0 5px}.login-intro{font-size:15px;margin-bottom:19px}.login-form{gap:7px}.login-form label{margin-top:5px}.login-form input{min-height:50px}.login-submit{margin-top:13px}.login-reader{margin-top:17px}.login-privacy{margin-top:16px}}
 """
 
 
@@ -803,7 +835,7 @@ def page(titulo, corpo):
     if not re.fullmatch(r'(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{8})', bg):
         bg = 'f7e18025'
     css_bg = 'body{background:#' + bg + '}'
-    pagina_classe = 'aba-leitores' if request.endpoint == 'leitores' else ''
+    pagina_classe = 'login-page' if request.endpoint == 'entrar' else ('aba-leitores' if request.endpoint == 'leitores' else '')
     return ('<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">'
             '<meta name="viewport" content="width=device-width,initial-scale=1">'
             f'<title>{esc(titulo)} · Biblioteca</title><style>{CSS}{css_bg}</style></head><body class="{pagina_classe}">'
@@ -891,11 +923,21 @@ def entrar():
             log('Entrou no sistema')
             return redirect(url_for('trocar_senha_usuario') if u['senha_temporaria'] else url_for('acervo'))
         flash('Senha incorreta.')
-    corpo = (f'<div class="card" style="max-width:360px;margin:40px auto"><h3>Acesso da equipa</h3>'
-             f'<form method="post"><label>Utilizador<br><input name="nome" required autocomplete="username"></label><br>'
-             f'<input name="senha" type="password" placeholder="Senha" autocomplete="current-password" required><br>'
-             f'<button class="btn">Entrar</button></form>'
-             f"<p><a href=\"{url_for('minha_conta')}\">Acesso à área do leitor</a></p></div>")
+    link_area_leitor = url_for('minha_conta')
+    corpo = (f'<section class="login-shell" aria-label="Entrar na biblioteca">'
+             f'<div class="login-visual"><div class="login-mark">B</div><p class="login-kicker">A SUA BIBLIOTECA</p>'
+             f'<h1>Livros que encontram o seu lugar.</h1><p>Organize o acervo, acompanhe empréstimos e mantenha tudo consigo.</p>'
+             f'<span class="login-shelf-note">Um espaço seu, no seu computador.</span></div>'
+             f'<div class="login-panel"><div class="login-panel-brand"><span class="login-mark small">B</span><span>Biblioteca</span></div>'
+             f'<h2>Bem-vindo</h2><p class="login-intro">Entre para continuar a cuidar do seu acervo.</p>'
+             f'<form method="post" class="login-form"><label for="login-nome">Utilizador</label>'
+             f'<input id="login-nome" name="nome" required autocomplete="username" placeholder="O seu utilizador">'
+             f'<label for="login-senha">Senha</label><div class="login-password"><input id="login-senha" name="senha" type="password" autocomplete="current-password" required placeholder="A sua senha">'
+             f'<button type="button" class="login-show" aria-label="Mostrar senha" onclick=&quot;toggleLoginPassword()&quot;>Mostrar</button></div>'
+             f'<button class="login-submit" type="submit">Entrar na biblioteca</button></form>'
+             f'<a class="login-reader" href="{link_area_leitor}">Acesso à área do leitor <span aria-hidden="true">→</span></a>'
+             f'<p class="login-privacy">Os seus dados ficam guardados localmente neste computador.</p></div></section>'
+             f'<script>function toggleLoginPassword(){{const i=document.getElementById("login-senha");i.type=i.type==="password"?"text":"password";}}</script>')
     return page('Entrar', corpo)
 
 
@@ -2785,6 +2827,7 @@ if __name__ == '__main__':
             serve(app, host='127.0.0.1', port=5000, threads=4)
         else:
             app.run(host='127.0.0.1', port=5000, debug=False)
+
 
 
 
