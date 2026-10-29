@@ -31,3 +31,4 @@ desktop.ini
 
 /*.db-*
 /.upload-files.json
+/.codespace-data/
