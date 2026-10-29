@@ -356,12 +356,20 @@ def carregar_email_cfg():
                 dados = json.load(f)
         except Exception:
             dados = {}
+    host = dados['host'] if 'host' in dados else os.environ.get('BIBLIO_SMTP_HOST', '')
+    porta_raw = dados['porta'] if 'porta' in dados else os.environ.get('BIBLIO_SMTP_PORT', '')
+    usuario = dados['usuario'] if 'usuario' in dados else os.environ.get('BIBLIO_SMTP_USER', '')
+    remetente = dados['remetente'] if 'remetente' in dados else (usuario or os.environ.get('BIBLIO_SMTP_USER', ''))
+    try:
+        porta = int(porta_raw) if str(porta_raw or '').strip() else ''
+    except (TypeError, ValueError):
+        porta = ''
     return {
-        'host': dados.get('host') or os.environ.get('BIBLIO_SMTP_HOST', ''),
-        'porta': int(dados.get('porta') or os.environ.get('BIBLIO_SMTP_PORT', 587)),
-        'usuario': dados.get('usuario') or os.environ.get('BIBLIO_SMTP_USER', ''),
+        'host': str(host or '').strip(),
+        'porta': porta,
+        'usuario': str(usuario or '').strip(),
         'senha': os.environ.get('BIBLIO_SMTP_PASS', ''),
-        'remetente': dados.get('remetente') or dados.get('usuario') or os.environ.get('BIBLIO_SMTP_USER', ''),
+        'remetente': str(remetente or '').strip(),
     }
 
 
