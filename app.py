@@ -751,9 +751,13 @@ CSS = """
 body{font-family:system-ui,"Segoe UI",sans-serif;margin:0;background:#f7e18025;color:#263238;font-size:16px;line-height:1.5}
 header{background:#1f3a5f;color:#fff;padding:10px 16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
 header a{color:#fff}
-nav{background:#17304f;padding:0 12px;display:flex;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin}
+nav{background:#17304f;padding:0 12px;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:stretch;overflow-x:auto;scrollbar-width:thin}
 nav a{color:#cfe0f5;padding:10px 12px;text-decoration:none;font-size:16px;white-space:nowrap;flex:0 0 auto}
 nav a.ativo{color:#fff;border-bottom:2px solid #fff}
+.nav-bloco{display:flex;align-items:stretch;min-width:max-content}
+.nav-bloco-gestao{justify-self:start;border-right:1px solid #ffffff45;padding-right:8px}
+.nav-bloco-operacao{justify-self:end;padding-left:8px}
+nav .nav-bloco-gestao a{color:#fff;font-weight:700}
 main{padding:16px;max-width:1150px;margin:auto}
 .card{background:#42c8b175;border-radius:8px;padding:16px;margin-bottom:16px;box-shadow:0 1px 3px #0001}
 .aba-leitores .card{background:#42c8b146}
@@ -854,6 +858,10 @@ body:not(.login-page):not(.reader-page) .reader-status{padding:.175rem .394rem;f
 body:not(.login-page):not(.reader-page) .reader-hero{padding:.875rem;margin-bottom:.7rem;border-radius:.35rem}
 body:not(.login-page):not(.reader-page) .reader-grid{grid-template-columns:repeat(auto-fit,minmax(9.1875rem,1fr));gap:.525rem}
 body:not(.login-page):not(.reader-page) .reader-tile{padding:.6125rem;border-radius:.35rem}
+@media(max-width:699px){
+  body:not(.login-page):not(.reader-page) table{display:block;max-width:100%;overflow-x:auto}
+  body:not(.login-page):not(.reader-page) .filtro{float:none!important;display:block;width:100%!important;box-sizing:border-box;margin:.4rem 0}
+}
 
 
 /* Área do leitor: proposta do tablet, com livros clássicos e escala própria. */
@@ -905,14 +913,23 @@ def page(titulo, corpo):
     if 'leitor_uid' in session:
         links = (f'<a href="{url_for("minha_conta")}">Minha biblioteca</a>'
                  f'<a href="{url_for("catalogo_leitor")}">Catálogo</a>')
-        info = f'{esc(session.get("leitor_nome", "Leitor"))} · <form method="post" action="{url_for("sair")}" style="display:inline"><button class="btn">Sair</button></form>'
+        info = (f'{esc(session.get("leitor_nome", "Leitor"))} · '
+                f'<form method="post" action="{url_for("trocar_perfil", perfil="equipa")}" style="display:inline"><button class="btn btn-trocar">Acesso da equipa</button></form> '
+                f'<form method="post" action="{url_for("sair")}" style="display:inline"><button class="btn">Sair</button></form>')
     if 'uid' in session:
+        gestao = [(k, v) for k, v in AREAS.items() if k in ('acervo', 'relatorios', 'eventos') and can(k)]
+        if gestao:
+            links += '<span class="nav-bloco nav-bloco-gestao">'
+            links += ''.join(f'<a href="{url_for(k)}" class="{"ativo" if request.endpoint == k else ""}">{v}</a>' for k, v in gestao) + '</span>'
+        links += '<span class="nav-bloco nav-bloco-operacao">'
         for k, v in AREAS.items():
-            if can(k):
+            if k not in ('acervo', 'relatorios', 'eventos') and can(k):
                 cls = 'ativo' if request.endpoint == k else ''
                 links += f'<a href="{url_for(k)}" class="{cls}">{v}</a>'
-        links += f'<a href="{url_for("minha_conta")}">Área do leitor</a>'
-        info = f'{esc(session["nome"])} · <form method="post" action="{url_for("sair")}" style="display:inline"><button class="btn">Sair</button></form>'
+        links += '</span>'
+        info = (f'{esc(session["nome"])} · '
+                f'<form method="post" action="{url_for("trocar_perfil", perfil="leitor")}" style="display:inline"><button class="btn btn-trocar">Área do leitor</button></form> '
+                f'<form method="post" action="{url_for("sair")}" style="display:inline"><button class="btn">Sair</button></form>')
     avisos = ''.join(f'<div class="aviso">{esc(m)}</div>' for m in get_flashed_messages())
     bg = request.args.get('bg', 'f7e18025')
     if not re.fullmatch(r'(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{8})', bg):
@@ -1146,9 +1163,10 @@ def minha_conta():
     emprestimo_rows = ''.join(
         f"<tr class=\"{'atrasado' if situacao(e) == 'atrasado' else ''}\"><td>{esc(e['livro'])}</td>"
         f"<td>{fmt(e['retirada'])}</td><td>{fmt(e['prevista'])}</td>"
-        f"<td><span class=\"reader-status\">{esc(ROTULO[situacao(e)])}</span></td><td>"
+        f"<td><span class=\"reader-status\">{esc(ROTULO[situacao(e)])}</span><br><small>{e['renovacoes']} {'renovação' if e['renovacoes'] == 1 else 'renovações'}</small></td><td>"
         + (post_btn(url_for('renovar_leitor', id=e['id']), 'Renovar')
-           if e['renovacoes'] < MAX_RENOV and not tem_reserva(e['livro_id']) else '—')
+           if e['renovacoes'] < MAX_RENOV and not tem_reserva(e['livro_id']) else
+           ('<span title="Cancele ou aguarde a reserva ativa para renovar.">Indisponível: há reserva</span>' if tem_reserva(e['livro_id']) else 'Limite de renovações atingido'))
         + f"</td></tr>" for e in emprestimos_atuais)
     if not emprestimo_rows:
         emprestimo_rows = '<tr><td colspan="5">Não tem empréstimos ativos.</td></tr>'
@@ -1184,7 +1202,7 @@ def minha_conta():
     {alerta}
     <div class="card"><h2>Meus empréstimos</h2>
       <table><tr><th>Item</th><th>Retirado</th><th>Devolução prevista</th><th>Situação</th><th></th></tr>{emprestimo_rows}</table>
-      <p class="fr-nota">Renovação conforme as regras da biblioteca; não é permitida se outra pessoa reservou o item.</p>
+      <p class="fr-nota">Cada empréstimo pode ser renovado até {MAX_RENOV} vezes. Se houver uma reserva ativa para o item, a renovação fica bloqueada e o motivo aparece junto ao empréstimo.</p>
     </div>
     <div class="card"><h2>Minhas reservas</h2>
       <table><tr><th>Item</th><th>Situação</th><th></th></tr>{reservas_rows}</table>
@@ -1767,8 +1785,10 @@ def salvar_capa(arquivo, livro_id):
 def acervo():
     q_raw = request.args.get('q', '')
     q = norm(q_raw)
+    midia_filtro = request.args.get('midia', '')
     lista = [l for l in rows(SQL_LIVROS + " ORDER BY l.titulo COLLATE NOCASE")
-             if q in norm(' '.join(str(l[c] or '') for c in ['titulo', 'autor', 'coautor', 'editora', 'chamada', 'midia']))]
+             if q in norm(' '.join(str(l[c] or '') for c in ['titulo', 'autor', 'coautor', 'editora', 'chamada', 'midia']))
+             and (not midia_filtro or l['midia'] == midia_filtro)]
     trs = ''.join(f"""<tr>
         <td>{capa_img(l)}</td><td>{esc(l['titulo'])}</td><td>{esc(l['autor'])}</td>
         <td>{esc(l['midia'])}</td><td>{esc(l['cdd'])}</td><td>{esc(l['chamada'])}</td>
@@ -1780,6 +1800,9 @@ def acervo():
     <div class="card">
       <a class="btn" href="{url_for('novo_livro')}">+ Novo livro / item</a>
       <input class="filtro" placeholder="Buscar enquanto digita..." style="float:right;width:300px">
+      <label>Tipo de material <select onchange="location.href='?midia='+encodeURIComponent(this.value)">
+        <option value="">Todos</option>{''.join(f'<option value="{esc(m)}" {"selected" if midia_filtro == m else ""}>{esc(m)}</option>' for m in MIDIAS)}
+      </select></label>
     </div>
     <div class="card">
       <table class="lista">
@@ -2075,10 +2098,16 @@ def emprestimos():
                 acoes += post_btn(url_for('renovar', id=e['id']), 'Renovar')
             acoes += post_btn(url_for('devolver', id=e['id']), 'Devolver')
         cls = 'devolvido' if s == 'devolvido' else ('atrasado' if s == 'atrasado' else '')
-        extra = f" (renovado {e['renovacoes']}x)" if e['renovacoes'] else ''
+        extra = f" · {e['renovacoes']} {'renovação' if e['renovacoes'] == 1 else 'renovações'}" if e['renovacoes'] else ''
+        motivo_renovacao = ''
+        if not e['devolucao']:
+            if tem_reserva(e['livro_id']):
+                motivo_renovacao = '<small class="fr-nota">Não renovável: existe reserva ativa.</small>'
+            elif e['renovacoes'] >= MAX_RENOV:
+                motivo_renovacao = '<small class="fr-nota">Limite de renovações atingido.</small>'
         trs += (f'<tr class="{cls}"><td>{esc(e["leitor"])}</td><td>{esc(e["livro"])} ({esc(e["midia"])})</td>'
                 f'<td>{fmt(e["retirada"])}</td><td>{fmt(e["prevista"])}</td><td>{fmt(e["devolucao"])}</td>'
-                f'<td>{ROTULO[s]}{extra}</td><td>{acoes}</td></tr>')
+                f'<td>{ROTULO[s]}{extra}</td><td>{acoes}{motivo_renovacao}</td></tr>')
 
     res_trs = ''
     for r in rows("SELECT r.*, l.titulo AS livro, l.midia AS midia, p.nome AS leitor FROM reservas r "
@@ -2100,7 +2129,7 @@ def emprestimos():
         for n in rows("SELECT n.*, l.nome AS leitor FROM notificacoes n "
                       "LEFT JOIN leitores l ON l.id = n.leitor_id ORDER BY n.id DESC LIMIT 100"))
 
-    dl_disp = ''.join(f'<option value="{esc(b["titulo"])} — {esc(b["midia"])}"></option>'
+    dl_disp = ''.join(f'<option value="{b["id"]}" data-label="{esc(b["titulo"])} — {esc(b["midia"])}" data-search="{esc(norm(b["titulo"] + " " + b["autor"] + " " + b["midia"]))}">{esc(b["titulo"])} — {esc(b["midia"])} · {b["disp"]} disponível(is)</option>'
                       for b in rows(SQL_LIVROS + " WHERE disp > 0 ORDER BY l.titulo COLLATE NOCASE"))
     indis = rows(SQL_LIVROS + " WHERE disp <= 0 ORDER BY l.titulo COLLATE NOCASE")
     dl_r = ''.join(f'<option value="{esc(b["titulo"])} — {esc(b["midia"])}"></option>' for b in indis)
@@ -2112,13 +2141,21 @@ def emprestimos():
       <form method="post" class="form-cadastro" action="{url_for('novo_emprestimo')}">
         <div class="grid">
           <select name="leitor_id">{op_l}</select>
-          <select name="livro_id">{op_b}</select>
-          <input name="livro_txt" list="dl-disp" placeholder="ou digite o título ou autor" autocomplete="off">
+          <label>Item disponível
+            <input id="emprestimo-busca" placeholder="Pesquise por título, autor ou tipo..." autocomplete="off" aria-controls="emprestimo-itens">
+            <select id="emprestimo-itens" name="livro_id" size="5" required aria-label="Escolha um item disponível">{op_b}</select>
+          </label>
         </div>
         <datalist id="dl-disp">{dl_disp}</datalist>
         <button class="btn">Registrar empréstimo ({PRAZO} dias)</button>
       </form>
     </div>
+    <script>
+    (()=>{{const q=document.getElementById('emprestimo-busca'),s=document.getElementById('emprestimo-itens');if(!q||!s)return;
+      const all=[...s.options].slice(1);q.addEventListener('input',()=>{{const t=semAcento(q.value.trim());all.forEach(o=>{{o.hidden=!!t&&!semAcento(o.textContent).includes(t)}});s.selectedIndex=-1;}});
+      s.addEventListener('change',()=>{{const o=s.selectedOptions[0];if(o&&o.value)q.value=o.textContent.trim();}});
+    }})();
+    </script>
     <div class="card">
       <h3>Reservar item indisponível</h3>
       <form method="post" class="form-cadastro" action="{url_for('reservar')}">
@@ -2331,6 +2368,13 @@ def fmt(iso):
     return iso.split('-')[2] + '/' + iso.split('-')[1] + '/' + iso.split('-')[0] if iso else '—'
 
 
+def rotulo_renovacoes(valor):
+    valor = int(valor or 0)
+    if valor == 0:
+        return 'Nenhuma'
+    return f'{valor} renovação' if valor == 1 else f'{valor} renovações'
+
+
 # ---------------------------------------------------------------- relatórios
 
 TIPOS_RELATORIO = {
@@ -2394,14 +2438,16 @@ def dados_relatorio(tipo, de, ate, lei, tit):
             out.append([e['leitor'], f"{e['livro']} ({e['midia']})", fmt(e['retirada']), fmt(e['prevista'])])
         return cab, out
     # empréstimos feitos no período
-    cab = ['Leitor', 'Item', 'Retirada', 'Prevista', 'Devolução', 'Situação']
+    cab = ['Leitor', 'Item', 'Retirada', 'Prevista', 'Devolução', 'Renovações', 'Situação']
     for e in rows(SQL_EMP + " ORDER BY e.retirada DESC"):
         if not (de <= e['retirada'] <= ate):
             continue
         if not do_leitor(e['leitor_id']) or not do_titulo(e['livro'] or ''):
             continue
+        renov = int(e['renovacoes'] or 0)
+        marcador = rotulo_renovacoes(renov)
         out.append([e['leitor'], f"{e['livro']} ({e['midia']})", fmt(e['retirada']), fmt(e['prevista']),
-                    fmt(e['devolucao']), ROTULO[situacao(e)]])
+                    fmt(e['devolucao']), marcador, ROTULO[situacao(e)]])
     for r in rows("SELECT r.*, l.titulo AS livro, l.midia AS midia, p.nome AS leitor FROM reservas r "
                   "LEFT JOIN livros l ON l.id = r.livro_id LEFT JOIN leitores p ON p.id = r.leitor_id "
                   "WHERE r.status IN ('ativa', 'pronta') ORDER BY r.criada DESC"):
@@ -2826,6 +2872,16 @@ def importar_json():
     session.clear()
     flash('Backup restaurado. Entre novamente.')
     return redirect(url_for('entrar'))
+
+
+@app.route('/trocar-perfil/<perfil>', methods=['POST'])
+def trocar_perfil(perfil):
+    """Encerra a sessão atual e abre diretamente o login do outro perfil."""
+    if perfil not in ('equipa', 'leitor'):
+        abort(404)
+    session.clear()
+    flash('Entre com a conta correspondente para continuar.')
+    return redirect(url_for('entrar' if perfil == 'equipa' else 'minha_conta'))
 
 
 @app.route('/email/config', methods=['POST'])
