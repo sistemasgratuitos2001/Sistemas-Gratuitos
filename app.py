@@ -817,36 +817,77 @@ body.login-page{background:#f7f1df;color:#173b37;min-height:100vh}
 @media(max-height:700px) and (min-width:700px){.login-page main{padding:1rem 0}.login-shell{min-height:90svh}.login-panel{padding-top:1.5rem;padding-bottom:1.5rem}.login-panel h2{margin-top:1.2rem}.login-intro{margin-bottom:1rem}.login-form{gap:.35rem}.login-form label{margin-top:.25rem}.login-form input{min-height:2.7rem;padding:.55rem .8rem}.login-submit{min-height:2.8rem;margin-top:.5rem}.login-reader{margin-top:.7rem;padding:.5rem 0}.login-privacy{margin-top:.7rem}}
 
 /* Escala 70% para as áreas internas; login mantém a escala e o layout próprios. */
-html:not(.login-page){font-size:70%}
-body:not(.login-page){font-size:1rem}
-body:not(.login-page) header{padding:.44rem .69rem;gap:.35rem}
-body:not(.login-page) nav{padding:0 .525rem}
-body:not(.login-page) nav a{padding:.44rem .525rem;font-size:1rem}
-body:not(.login-page) main{padding:.7rem;max-width:71.875rem}
-body:not(.login-page) .card{padding:.7rem;margin-bottom:.7rem;border-radius:.35rem}
-body:not(.login-page) table{font-size:1rem}
-body:not(.login-page) th,body:not(.login-page) td{padding:.2625rem;border-bottom-width:1px}
-body:not(.login-page) input,body:not(.login-page) select{padding:.35rem .394rem;margin:.13rem 0;border-radius:.175rem;font-size:1rem}
-body:not(.login-page) .btn{padding:.35rem .569rem;border-radius:.175rem;margin:.0875rem 0;font-size:1rem}
-body:not(.login-page) .grid{grid-template-columns:repeat(auto-fit,minmax(8.75rem,1fr));gap:.35rem;margin-bottom:.35rem}
-body:not(.login-page) .grid label{font-size:1rem}
-body:not(.login-page) .capa,body:not(.login-page) .capa-vazia{height:5.25rem}
-body:not(.login-page) .capa-vazia{width:3.75rem;padding:.25rem;font-size:.625rem}
-body:not(.login-page) .capa-opcao{height:4.375rem;margin:.25rem}
-body:not(.login-page) #capa-preview,body:not(.login-page) #capa-padrao-preview{height:14.7rem !important;max-width:min(100%,12.25rem)}
-body:not(.login-page) .folha{padding:1.05rem;border-radius:.175rem}
-body:not(.login-page) .folha-topo{gap:1.05rem;padding-bottom:.7rem;margin-bottom:.525rem}
-body:not(.login-page) .folha-capa{min-width:5.25rem;padding:.4375rem 0 0 .4375rem}
-body:not(.login-page) .folha-texto{min-width:11.375rem}
-body:not(.login-page) .fr-linha{margin:.2625rem 0}
-body:not(.login-page) .fr-campo{font-size:.875rem}
-body:not(.login-page) .fr-campo input{font-size:1.05rem}
-body:not(.login-page) .fr-nota{font-size:.875rem}
-body:not(.login-page) .reader-status{padding:.175rem .394rem;font-size:.875rem}
-body:not(.login-page) .reader-hero{padding:.875rem;margin-bottom:.7rem;border-radius:.35rem}
-body:not(.login-page) .reader-grid{grid-template-columns:repeat(auto-fit,minmax(9.1875rem,1fr));gap:.525rem}
-body:not(.login-page) .reader-tile{padding:.6125rem;border-radius:.35rem}
+html:not(.login-page):not(.reader-page){font-size:70%}
+body:not(.login-page):not(.reader-page){font-size:1rem}
+body:not(.login-page):not(.reader-page) header{padding:.44rem .69rem;gap:.35rem}
+body:not(.login-page):not(.reader-page) nav{padding:0 .525rem}
+body:not(.login-page):not(.reader-page) nav a{padding:.44rem .525rem;font-size:1rem}
+body:not(.login-page):not(.reader-page) main{padding:.7rem;max-width:71.875rem}
+body:not(.login-page):not(.reader-page) .card{padding:.7rem;margin-bottom:.7rem;border-radius:.35rem}
+body:not(.login-page):not(.reader-page) table{font-size:1rem}
+body:not(.login-page):not(.reader-page) th,body:not(.login-page):not(.reader-page) td{padding:.2625rem;border-bottom-width:1px}
+body:not(.login-page):not(.reader-page) input,body:not(.login-page):not(.reader-page) select{padding:.35rem .394rem;margin:.13rem 0;border-radius:.175rem;font-size:1rem}
+body:not(.login-page):not(.reader-page) .btn{padding:.35rem .569rem;border-radius:.175rem;margin:.0875rem 0;font-size:1rem}
+body:not(.login-page):not(.reader-page) .grid{grid-template-columns:repeat(auto-fit,minmax(8.75rem,1fr));gap:.35rem;margin-bottom:.35rem}
+body:not(.login-page):not(.reader-page) .grid label{font-size:1rem}
+body:not(.login-page):not(.reader-page) .capa,body:not(.login-page):not(.reader-page) .capa-vazia{height:5.25rem}
+body:not(.login-page):not(.reader-page) .capa-vazia{width:3.75rem;padding:.25rem;font-size:.625rem}
+body:not(.login-page):not(.reader-page) .capa-opcao{height:4.375rem;margin:.25rem}
+body:not(.login-page):not(.reader-page) #capa-preview,body:not(.login-page):not(.reader-page) #capa-padrao-preview{height:14.7rem !important;max-width:min(100%,12.25rem)}
+body:not(.login-page):not(.reader-page) .folha{padding:1.05rem;border-radius:.175rem}
+body:not(.login-page):not(.reader-page) .folha-topo{gap:1.05rem;padding-bottom:.7rem;margin-bottom:.525rem}
+body:not(.login-page):not(.reader-page) .folha-capa{min-width:5.25rem;padding:.4375rem 0 0 .4375rem}
+body:not(.login-page):not(.reader-page) .folha-texto{min-width:11.375rem}
+body:not(.login-page):not(.reader-page) .fr-linha{margin:.2625rem 0}
+body:not(.login-page):not(.reader-page) .fr-campo{font-size:.875rem}
+body:not(.login-page):not(.reader-page) .fr-campo input{font-size:1.05rem}
+body:not(.login-page):not(.reader-page) .fr-nota{font-size:.875rem}
+body:not(.login-page):not(.reader-page) .reader-status{padding:.175rem .394rem;font-size:.875rem}
+body:not(.login-page):not(.reader-page) .reader-hero{padding:.875rem;margin-bottom:.7rem;border-radius:.35rem}
+body:not(.login-page):not(.reader-page) .reader-grid{grid-template-columns:repeat(auto-fit,minmax(9.1875rem,1fr));gap:.525rem}
+body:not(.login-page):not(.reader-page) .reader-tile{padding:.6125rem;border-radius:.35rem}
 
+
+/* Área do leitor: proposta do tablet, com livros clássicos e escala própria. */
+html.reader-page{font-size:clamp(16px,1.3vw,36px)}
+body.reader-page{background:#eee6d5;color:#243a35;min-height:100vh}
+body.reader-page header,body.reader-page nav{background:#193b37}
+body.reader-page.reader-authenticated{background-image:linear-gradient(#f2ead8e8,#f2ead8e8),url('/static/leitor-livros-classicos.svg');background-position:center;background-size:cover;background-attachment:fixed}
+body.reader-page:not(.reader-authenticated) header,body.reader-page:not(.reader-authenticated) nav{display:none}
+body.reader-page:not(.reader-authenticated) main{max-width:none;min-height:100svh;padding:0;display:block}
+body.reader-page .aviso{box-sizing:border-box}
+.reader-login-shell{min-height:100svh;width:100%;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1.12fr) minmax(24rem,.88fr);background:linear-gradient(90deg,#122c2be0 0%,#163b36b8 47%,#122c2bc9 100%),url('/static/leitor-livros-classicos.svg') center/cover no-repeat;color:#fff}
+.reader-login-scene{position:relative;min-height:100svh;box-sizing:border-box;padding:2.5rem 5vw;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+.reader-brand{display:flex;align-items:center;gap:.8rem;text-transform:uppercase;letter-spacing:.14em;font-size:.9rem;font-weight:750;color:#fff}
+.reader-mark{display:grid;place-items:center;width:3.6rem;height:3.6rem;border-radius:1rem;background:#218b73;font-size:2rem;font-weight:800;box-shadow:0 .5rem 1.5rem #061d1c55}
+.reader-scene-kicker{font-size:.85rem;letter-spacing:.18em;font-weight:750;color:#e4eadd;margin:2rem 0 0}
+.reader-book-notes{display:flex;flex-direction:column;align-items:flex-start;gap:.75rem;padding:0 0 2rem 1rem}
+.reader-book-note{min-width:min(27rem,74%);padding:1.2rem 1.6rem;border:.55rem solid #ffffff20;border-radius:.7rem;color:#fff;text-align:center;font-weight:750;letter-spacing:.05em;box-shadow:0 .8rem 1.7rem #071e1d55}
+.note-ochre{background:#a77942;transform:rotate(-5deg)}.note-green{background:#218b73;transform:rotate(3deg);margin-left:1.2rem}.note-blue{background:#38596b;transform:rotate(-2deg);margin-left:2rem}
+.reader-login-side{display:grid;place-items:center;padding:2rem clamp(1.2rem,4vw,4rem);background:#102b29aa;backdrop-filter:blur(2px)}
+.reader-login-card{width:min(100%,35rem);box-sizing:border-box;padding:clamp(2rem,3vw,3.2rem);background:#fffdf7;color:#173b37;border:.7rem solid #fffdf7;outline:1px solid #ddcfb1;outline-offset:-1.3rem;border-radius:1rem;box-shadow:0 1.5rem 4rem #071e1d44}
+.reader-card-kicker{font-size:.8rem;letter-spacing:.18em;font-weight:750;color:#218b73;margin:0 0 1.2rem}
+.reader-login-card h1{font-size:clamp(2rem,2.5vw,3rem);line-height:1.15;margin:0 0 .6rem;color:#173b37}
+.reader-login-intro{color:#64766f;font-size:1rem;line-height:1.55;margin:0 0 1.8rem}
+.reader-login-form{display:flex;flex-direction:column;gap:.55rem}
+.reader-login-form label{font-size:.9rem;font-weight:650;margin-top:.35rem}
+.reader-login-form input{width:100%;box-sizing:border-box;min-height:3.2rem;padding:.8rem 1rem;border:1px solid #d8dfd7;border-radius:.55rem;background:#fff;color:#173b37;font-size:1rem}
+.reader-login-form input:focus{outline:3px solid #218b7330;border-color:#218b73}
+.reader-password-field{position:relative}.reader-password-field input{padding-right:5rem}
+.reader-password-toggle{position:absolute;right:.5rem;top:.45rem;height:2.3rem;padding:0 .4rem;border:0;background:transparent;color:#176b59;font-size:.85rem;font-weight:650;cursor:pointer}
+.reader-submit{min-height:3.4rem;margin-top:.8rem;border:0;border-radius:.55rem;background:#176b59;color:#fff;font-size:1rem;font-weight:700;cursor:pointer}
+.reader-submit:hover{background:#115947}
+.reader-local-note{margin:1.5rem 0 .8rem;color:#64766f;font-size:.85rem}
+.reader-team-link{font-size:.85rem;color:#176b59;text-decoration:none}.reader-team-link:hover{text-decoration:underline}
+body.reader-page.reader-authenticated main{max-width:86vw;padding:1.5rem 0}
+body.reader-page.reader-authenticated .reader-hero{min-height:18rem;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(1.5rem,3vw,3rem);color:#fff;background:linear-gradient(90deg,#102d2de8,#102d2d66),url('/static/leitor-livros-classicos.svg') center 45%/cover;border:1px solid #ffffff45;border-radius:1rem;box-shadow:0 .8rem 2rem #172b2722}
+body.reader-page.reader-authenticated .reader-hero h1{font-size:clamp(2rem,3vw,3rem);margin:0 0 .4rem}
+body.reader-page.reader-authenticated .reader-hero>p{font-size:1rem}
+body.reader-page.reader-authenticated .reader-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+body.reader-page.reader-authenticated .reader-tile{padding:1rem;background:#fffdf0e8;border-color:#ffffffa8;font-size:.95rem}
+body.reader-page.reader-authenticated .reader-tile strong{font-size:1.8rem;color:#176b59}
+@media(min-width:700px) and (max-width:1050px){html.reader-page{font-size:16px}.reader-login-shell{grid-template-columns:1fr minmax(22rem,.9fr)}.reader-login-scene{padding:2rem 4vw}.reader-login-card{padding:2.2rem;border-width:.5rem}.reader-book-note{min-width:min(23rem,82%)}body.reader-page.reader-authenticated main{max-width:92vw}}
+@media(max-width:699px){html.reader-page{font-size:16px}body.reader-page:not(.reader-authenticated) main{padding:0}.reader-login-shell{min-height:100svh;display:flex;flex-direction:column;background-position:center;background-attachment:scroll}.reader-login-scene{min-height:14rem;flex:0 0 14rem;padding:1.25rem 1.5rem 1rem}.reader-mark{width:2.8rem;height:2.8rem;border-radius:.8rem;font-size:1.55rem}.reader-brand{font-size:.75rem}.reader-scene-kicker{font-size:.7rem;margin:.8rem 0}.reader-book-notes{position:absolute;right:1.1rem;bottom:1rem;left:1.2rem;display:flex;flex-direction:row;gap:.3rem;padding:0;align-items:center}.reader-book-note{min-width:0;flex:1;padding:.5rem .25rem;border-width:.2rem;border-radius:.35rem;font-size:.55rem;letter-spacing:0;transform:none!important;margin:0!important}.reader-login-side{display:block;padding:1.25rem;background:#f2ead8e8;backdrop-filter:none}.reader-login-card{width:100%;padding:1.6rem;border-width:.35rem;outline-offset:-.8rem;border-radius:.7rem;box-shadow:0 .5rem 1.5rem #071e1d22}.reader-card-kicker{font-size:.7rem;margin-bottom:.65rem}.reader-login-card h1{font-size:1.8rem}.reader-login-intro{font-size:.9rem;margin-bottom:1rem}.reader-login-form{gap:.35rem}.reader-login-form label{font-size:.85rem;margin-top:.25rem}.reader-login-form input{min-height:3rem;padding:.65rem .8rem;font-size:1rem}.reader-password-toggle{top:.35rem}.reader-submit{min-height:3rem}body.reader-page.reader-authenticated main{max-width:none;padding:.8rem}body.reader-page.reader-authenticated .reader-hero{min-height:15rem;padding:1.25rem;background-position:58% center}body.reader-page.reader-authenticated .reader-grid{grid-template-columns:repeat(auto-fit,minmax(8rem,1fr));gap:.5rem}body.reader-page.reader-authenticated .reader-tile{padding:.7rem;font-size:.8rem}body.reader-page.reader-authenticated .reader-tile strong{font-size:1.4rem}}
 """
 
 
@@ -869,7 +910,7 @@ def page(titulo, corpo):
     if not re.fullmatch(r'(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{8})', bg):
         bg = 'f7e18025'
     css_bg = 'body{background:#' + bg + '}'
-    pagina_classe = 'login-page' if request.endpoint == 'entrar' else ('aba-leitores' if request.endpoint == 'leitores' else '')
+    pagina_classe = ('login-page' if request.endpoint == 'entrar' else ('reader-page reader-authenticated' if request.endpoint == 'minha_conta' and 'leitor_uid' in session else ('reader-page' if request.endpoint == 'minha_conta' else ('aba-leitores' if request.endpoint == 'leitores' else ''))))
     return (f'<!DOCTYPE html><html lang="pt-BR" class="{pagina_classe}"><head><meta charset="UTF-8">'
             '<meta name="viewport" content="width=device-width,initial-scale=1">'
             f'<title>{esc(titulo)} · Biblioteca</title><style>{CSS}{css_bg}</style></head><body class="{pagina_classe}">'
@@ -1044,19 +1085,37 @@ def minha_conta():
     if not leitor:
         aviso_equipa = ('<div class="aviso">Está com a sessão da equipa aberta. Entre com a matrícula/e-mail e senha de um leitor para mudar para a área privada.</div>'
                         if 'uid' in session else '')
+        link_equipa = url_for('entrar')
         corpo = f"""
         {aviso_equipa}
-        <div class="card" style="max-width:440px;margin:40px auto">
-          <h2>Minha biblioteca</h2>
-          <p>Consulte os seus empréstimos, prazos, reservas e avisos.</p>
-          <form method="post">
-            <label>Matrícula ou e-mail<br><input name="identificador" autocomplete="username" required style="width:100%"></label><br>
-            <label>Senha<br><input name="senha" type="password" autocomplete="current-password" required style="width:100%"></label><br>
-            <button class="btn">Entrar</button>
-          </form>
-          <p class="fr-nota">A sessão termina quando o sistema é reiniciado. A senha temporária deve ser substituída antes de entrar na área privada.</p>
-          <a href="{url_for('entrar')}">Acesso da equipa</a>
-        </div>"""
+        <section class="reader-login-shell" aria-label="Acesso à biblioteca do leitor">
+          <div class="reader-login-scene">
+            <div class="reader-brand"><span class="reader-mark">B</span><span>Biblioteca pessoal</span></div>
+            <p class="reader-scene-kicker">LIVROS QUE VIVEM COM VOCÊ</p>
+            <div class="reader-book-notes" aria-hidden="true">
+              <div class="reader-book-note note-ochre">HISTÓRIAS GUARDADAS</div>
+              <div class="reader-book-note note-green">LEITURAS PARA DESCOBRIR</div>
+              <div class="reader-book-note note-blue">UM ACERVO, MUITAS IDEIAS</div>
+            </div>
+          </div>
+          <div class="reader-login-side"><div class="reader-login-card">
+            <p class="reader-card-kicker">ÁREA DO LEITOR</p>
+            <h1>Entre na sua biblioteca</h1>
+            <p class="reader-login-intro">Consulte empréstimos, prazos, reservas e avisos.</p>
+            <form method="post" class="reader-login-form">
+              <label for="reader-id">Matrícula ou e-mail</label>
+              <input id="reader-id" name="identificador" autocomplete="username" required placeholder="A sua matrícula ou e-mail">
+              <label for="reader-password">Senha</label>
+              <div class="reader-password-field"><input id="reader-password" name="senha" type="password" autocomplete="current-password" required placeholder="A sua senha">
+                <button type="button" class="reader-password-toggle" aria-label="Mostrar senha" onclick=&quot;toggleReaderPassword()&quot;>Mostrar</button>
+              </div>
+              <button class="reader-submit" type="submit">Entrar</button>
+            </form>
+            <p class="reader-local-note">Os seus dados permanecem na biblioteca local.</p>
+            <a class="reader-team-link" href="{link_equipa}">Acesso da equipa</a>
+          </div></div>
+        </section>
+        <script>function toggleReaderPassword(){{const i=document.getElementById("reader-password");i.type=i.type==="password"?"text":"password";}}</script>"""
         return page('Área do leitor', corpo)
 
     if leitor['senha_temporaria']:
