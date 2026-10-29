@@ -1,3 +1,5 @@
-# Estado do protótipo web
+# Estado da versão web
 
-A autenticação online foi retirada da página pública. O produto em desenvolvimento é uma aplicação instalada, com dados locais e opção futura de acesso pela rede local. Esta pasta mantém o protótipo anterior apenas para referência; ainda não há instalador oficial.
+`web/` contém agora a aplicação beta React/Supabase. `web/landing/` mantém a página informativa pública, publicada num projeto Cloudflare Pages separado.
+
+A edição local Flask/SQLite continua a ser a versão de referência e contém mais recursos. A versão beta aceita contas próprias e separa os dados por biblioteca com políticas RLS. Não importar bases SQLite locais para o Supabase.

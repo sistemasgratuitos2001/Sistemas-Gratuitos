@@ -1,9 +1,13 @@
-# Protótipo web arquivado
+# Biblioteca Pessoal — beta web
 
-Esta pasta contém um experimento anterior de aplicação web com React, Supabase e autenticação hospedada. **Não é o produto para os utilizadores e não deve ser usado para catalogar livros ou criar contas online.** A utilização pretendida é local/offline; cada instalação terá os seus próprios dados.
+Aplicação web de teste, publicada separadamente da página informativa e da edição local.
 
-A página pública do Cloudflare foi substituída por uma página informativa sem login. O código do protótipo fica neste repositório como referência para decisões futuras, mas não integra o pacote de instalação atual.
+Cada conta cria ou aceita convite para uma biblioteca própria. A base de teste usa Supabase Auth, Postgres e políticas RLS; não importe dados privados da aplicação local.
 
-As migrações e o esquema aqui guardados pertencem apenas a esse experimento. Não envie o banco SQLite, leitores, empréstimos, capas ou credenciais locais para o Supabase.
+## Desenvolvimento
 
-A versão funcional em desenvolvimento está na raiz do projeto: `app.py`, `Iniciar Biblioteca.bat` e `requirements.txt`. O suporte multiplataforma e um instalador simples ainda serão definidos.
+1. Copie `.env.example` para `.env` e preencha `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY`.
+2. Execute `npm ci` e `npm run dev`.
+3. O deploy beta é feito pelo Cloudflare Pages a partir da pasta `web/` na branch `main`.
+
+A página informativa permanece em `landing/` e é publicada por um projeto Pages separado.
