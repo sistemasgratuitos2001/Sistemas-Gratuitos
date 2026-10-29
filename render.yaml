@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: biblioteca-pessoal-flask
+    runtime: python
+    plan: starter
+    region: frankfurt
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 1 --threads 8 --timeout 180
+    healthCheckPath: /entrar
+    envVars:
+      - key: BIBLIO_DATA_DIR
+        value: /var/data
+      - key: BIBLIO_KEY
+        generateValue: true
+    disk:
+      name: biblioteca-data
+      mountPath: /var/data
+      sizeGB: 1
