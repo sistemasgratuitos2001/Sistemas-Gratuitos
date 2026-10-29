@@ -1503,7 +1503,10 @@ def _url_capa_permitida(url):
     p = urllib.parse.urlparse(url)
     try: porta_ok = p.port in (None, 443)
     except ValueError: return False
-    return p.scheme == 'https' and not p.username and not p.password and porta_ok and (p.hostname or '').lower().rstrip('.') in CAPA_HOSTS
+    host = (p.hostname or '').lower().rstrip('.')
+    # Open Library redirects valid cover images to numbered archive.org image hosts.
+    host_autorizado = host in CAPA_HOSTS or host == 'archive.org' or bool(re.fullmatch(r'ia\d+\.us\.archive\.org', host))
+    return p.scheme == 'https' and not p.username and not p.password and porta_ok and host_autorizado
 
 
 class RedirecionamentoCapas(urllib.request.HTTPRedirectHandler):
@@ -1799,13 +1802,16 @@ def novo_livro():
             flash('Já existe este título, autor e mídia. Use Editar para ajustar os exemplares.')
             return redirect(url_for('acervo'))
         novo_id = inserir_livro(d)
-        capa_nome = salvar_capa(request.files.get('capa'), novo_id) or baixar_capa(request.form.get('capa_url', ''), novo_id)
+        capa_url = request.form.get('capa_url', '')
+        capa_nome = salvar_capa(request.files.get('capa'), novo_id) or baixar_capa(capa_url, novo_id)
         if not capa_nome and request.form.get('usar_capa_cdd'):
             capa_nome = capa_padrao_cdd(d['cdd'])
             if not capa_nome:
                 flash('Não há imagem temática cadastrada para esta CDD; o livro foi salvo sem capa.')
         if capa_nome:
             run("UPDATE livros SET capa = ? WHERE id = ?", (capa_nome, novo_id))
+        elif capa_url:
+            flash('O item foi guardado, mas a capa escolhida não pôde ser descarregada. Tente outra capa ou envie um ficheiro de imagem.')
         log(f'Cadastrou item ({d["midia"]}): {d["titulo"]}')
         flash('Cadastrado.')
         return redirect(url_for('acervo'))
@@ -1840,13 +1846,16 @@ def editar_livro(id):
             return redirect(url_for('editar_livro', id=id))
         sets = ', '.join(f'{k} = ?' for k in d)
         run(f"UPDATE livros SET {sets} WHERE id = ?", list(d.values()) + [id])
-        capa_nome = salvar_capa(request.files.get('capa'), id) or baixar_capa(request.form.get('capa_url', ''), id)
+        capa_url = request.form.get('capa_url', '')
+        capa_nome = salvar_capa(request.files.get('capa'), id) or baixar_capa(capa_url, id)
         if not capa_nome and request.form.get('usar_capa_cdd'):
             capa_nome = capa_padrao_cdd(d['cdd'])
             if not capa_nome:
                 flash('Não há imagem temática cadastrada para esta CDD; o item foi salvo sem capa.')
         if capa_nome:
             run("UPDATE livros SET capa = ? WHERE id = ?", (capa_nome, id))
+        elif capa_url:
+            flash('As alterações foram guardadas, mas a capa escolhida não pôde ser descarregada. Tente outra capa ou envie um ficheiro de imagem.')
         elif re.fullmatch(r'cdd_\d{3}\.svg', str(l['capa'] or '')) and not request.form.get('usar_capa_cdd'):
             run("UPDATE livros SET capa = '' WHERE id = ?", (id,))
         log(f'Alterou item: {d["titulo"]}')
